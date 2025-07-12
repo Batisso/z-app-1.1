@@ -13,7 +13,7 @@ import { ErrorState } from "@/components/error-state";
 
 export const AiView = () => {
     const trpc = useTRPC();
-    const { data, isLoading} = useQuery(trpc.ai.getMany.queryOptions());
+    const { data, isLoading} = trpc.ai.getMany.useQuery();
 
     return (
       <ScrollArea className="h-screen w-full mx-auto">

@@ -4,7 +4,7 @@ import { useTRPC } from "@/trpc/client";
 
 export const ShopView = () => {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.shop.getMany.queryOptions());
+  const [data] = trpc.shop.getMany.useSuspenseQuery();
 
 if (!data) {
     return (

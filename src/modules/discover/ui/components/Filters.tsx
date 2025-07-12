@@ -11,6 +11,13 @@ type Creator = {
   basedIn: string;
   countryOfOrigin: string;
   discipline: string;
+  works: Array<{
+        id: string;
+        url: string;
+        title?: string;
+        medium?: string;
+        price?: number;
+    }>;
   styleTags: string[];
   profilePhoto: {
     url: string;
@@ -45,11 +52,10 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
     }
   };
 
-  const isCreatorsActive = activeState === 'Creators';
+ const isCreatorsActive = activeState === 'Creators';
   const isWorksActive = activeState === 'Works';
-
   return (
-    <>
+   <>
       <style jsx>{`
         @keyframes slideToRight {
           from {
@@ -69,41 +75,462 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
           }
         }
 
-        .slider-creators {
-          animation: slideToLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        @keyframes circulatingGlow {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
         }
 
-        .slider-works {
-          animation: slideToRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        @keyframes pulseGlow {
+          0%, 100% {
+            box-shadow: 
+              0 0 10px rgba(255, 140, 0, 0.4),
+              0 0 20px rgba(255, 140, 0, 0.3),
+              0 0 30px rgba(255, 140, 0, 0.2),
+              inset 0 0 10px rgba(255, 140, 0, 0.1);
+          }
+          50% {
+            box-shadow: 
+              0 0 20px rgba(255, 140, 0, 0.8),
+              0 0 40px rgba(255, 140, 0, 0.6),
+              0 0 60px rgba(255, 140, 0, 0.4),
+              inset 0 0 20px rgba(255, 140, 0, 0.2);
+          }
         }
+
+        @keyframes borderWave {
+          0% {
+            border-image: linear-gradient(0deg, #ff8c00, #ff4500, #ff6b35, #ff8c00) 1;
+          }
+          25% {
+            border-image: linear-gradient(90deg, #ff4500, #ff6b35, #ff8c00, #ff4500) 1;
+          }
+          50% {
+            border-image: linear-gradient(180deg, #ff6b35, #ff8c00, #ff4500, #ff6b35) 1;
+          }
+          75% {
+            border-image: linear-gradient(270deg, #ff8c00, #ff4500, #ff6b35, #ff8c00) 1;
+          }
+          100% {
+            border-image: linear-gradient(360deg, #ff4500, #ff6b35, #ff8c00, #ff4500) 1;
+          }
+        }
+
+        @keyframes sparkle {
+          0%, 100% {
+            opacity: 0;
+            transform: scale(0) rotate(0deg);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1) rotate(180deg);
+          }
+        }
+
+        @keyframes energyFlow {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
 
         @media (prefers-reduced-motion: reduce) {
           .slider-creators,
-          .slider-works {
-            animation: none;
+          .slider-works,
+          .toggle-container,
+          .circulating-glow,
+          .sparkle-effect {
+            animation: none !important;
+          }
+        }
+
+        /* Enhanced Toggle Container with Multiple Glow Layers */
+        .toggle-container {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(15px);
+          border: 3px solid transparent;
+          position: relative;
+          overflow: visible;
+          animation: pulseGlow 4s ease-in-out infinite;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toggle-container:hover {
+         
+          animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+      
+
+        /* Inner Background */
+        .toggle-inner-bg {
+          position: absolute;
+          top: 2px;
+          left: 2px;
+          right: 2px;
+          bottom: 2px;
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(10px);
+          border-radius: inherit;
+          z-index: -1;
+        }
+
+        .toggle-button {
+          position: relative;
+          z-index: 20;
+          font-weight: 600;
+          letter-spacing: 0.025em;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border: none;
+          background: transparent;
+          overflow: hidden;
+        }
+
+        .toggle-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.4),
+            transparent
+          );
+          transition: left 0.5s ease;
+        }
+
+        .toggle-button:hover::before {
+          left: 100%;
+        }
+
+        .toggle-button:focus {
+          outline: none;
+          box-shadow: 
+            0 0 0 3px rgba(255, 140, 0, 0.3),
+            0 0 20px rgba(255, 140, 0, 0.2);
+        }
+
+        .slider-background {
+          position: absolute;
+          top: 3px;
+          bottom: 3px;
+          width: calc(50% - 3px);
+          background: linear-gradient(135deg, #ff8c00 0%, #ff4500 50%, #ff6b35 100%);
+          background-size: 200% 200%;
+          border-radius: 9999px;
+          box-shadow: 
+            0 4px 15px rgba(255, 69, 0, 0.4),
+            0 2px 8px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+          transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1); /* Enhanced swoosh transition */
+          z-index: 10;
+          animation: energyFlow 3s ease-in-out infinite;
+          overflow: hidden;
+        }
+
+        .slider-background::before {
+          content: '';
+          position: absolute;
+          top: -2px;
+          left: -2px;
+          right: -2px;
+          bottom: -2px;
+          background: conic-gradient(
+            from 0deg,
+            rgba(255, 140, 0, 0.8),
+            rgba(255, 69, 0, 1),
+            rgba(255, 215, 0, 0.6),
+            rgba(255, 140, 0, 0.8)
+          );
+          border-radius: inherit;
+          z-index: -1;
+          animation: circulatingGlow 2s linear infinite;
+          filter: blur(1px);
+        }
+
+        .logo-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          opacity: 0.95;
+          position: relative;
+        }
+
+        .logo-circle {
+          background: rgba(255, 255, 255, 0.95);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 
+            0 2px 8px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(255, 140, 0, 0.3);
+          backdrop-filter: blur(5px);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .logo-circle::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: conic-gradient(
+            from 0deg,
+            transparent 0%,
+            rgba(255, 140, 0, 0.3) 50%,
+            transparent 100%
+          );
+          animation: circulatingGlow 4s linear infinite;
+        }
+
+        .logo-text {
+          position: relative;
+          z-index: 2;
+          font-weight: bold;
+          background: linear-gradient(45deg, #ff8c00, #ff4500, #ff6b35);
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: energyFlow 2s ease-in-out infinite;
+        }
+
+        /* Sparkle Effects */
+        .sparkle-effect {
+          position: absolute;
+          width: 4px;
+          height: 4px;
+          background: radial-gradient(circle, #fff 0%, rgba(255, 140, 0, 0.8) 100%);
+          border-radius: 50%;
+          pointer-events: none;
+        }
+
+        .sparkle-1 {
+          top: 10%;
+          left: 20%;
+          animation: sparkle 2s ease-in-out infinite;
+          animation-delay: 0s;
+        }
+
+        .sparkle-2 {
+          top: 80%;
+          right: 25%;
+          animation: sparkle 2s ease-in-out infinite;
+          animation-delay: 0.7s;
+        }
+
+        .sparkle-3 {
+          top: 30%;
+          right: 15%;
+          animation: sparkle 2s ease-in-out infinite;
+          animation-delay: 1.4s;
+        }
+
+        .sparkle-4 {
+          bottom: 20%;
+          left: 30%;
+          animation: sparkle 2s ease-in-out infinite;
+          animation-delay: 0.3s;
+        }
+
+        /* Mobile optimizations with enhanced effects */
+        @media (max-width: 480px) {
+          .toggle-container {
+            padding: 2px;
+            min-width: 200px;
+            height: 36px;
+          }
+          
+          .toggle-button {
+            padding: 6px 20px;
+            font-size: 13px;
+            min-width: 95px;
+            height: 32px;
+          }
+          
+          .logo-circle {
+            width: 18px;
+            height: 18px;
+          }
+          
+          .logo-text {
+            font-size: 9px;
+          }
+        }
+
+        @media (min-width: 481px) and (max-width: 640px) {
+          .toggle-container {
+            padding: 2px;
+            min-width: 220px;
+            height: 38px;
+          }
+          
+          .toggle-button {
+            padding: 7px 22px;
+            font-size: 14px;
+            min-width: 105px;
+            height: 34px;
+          }
+          
+          .logo-circle {
+            width: 20px;
+            height: 20px;
+          }
+          
+          .logo-text {
+            font-size: 10px;
+          }
+        }
+
+        @media (min-width: 641px) and (max-width: 768px) {
+          .toggle-container {
+            padding: 3px;
+            min-width: 240px;
+            height: 40px;
+          }
+          
+          .toggle-button {
+            padding: 8px 24px;
+            font-size: 15px;
+            min-width: 115px;
+            height: 34px;
+          }
+          
+          .logo-circle {
+            width: 22px;
+            height: 22px;
+          }
+          
+          .logo-text {
+            font-size: 11px;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .toggle-container {
+            padding: 3px;
+            min-width: 260px;
+            height: 42px;
+          }
+          
+          .toggle-button {
+            padding: 9px 26px;
+            font-size: 15px;
+            min-width: 125px;
+            height: 36px;
+          }
+          
+          .logo-circle {
+            width: 24px;
+            height: 24px;
+          }
+          
+          .logo-text {
+            font-size: 12px;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .toggle-container {
+            padding: 3px;
+            min-width: 280px;
+            height: 44px;
+          }
+          
+          .toggle-button {
+            padding: 10px 28px;
+            font-size: 16px;
+            min-width: 135px;
+            height: 38px;
+          }
+          
+          .logo-circle {
+            width: 26px;
+            height: 26px;
+          }
+          
+          .logo-text {
+            font-size: 13px;
+          }
+        }
+
+        @media (min-width: 1280px) {
+          .toggle-container {
+            padding: 4px;
+            min-width: 300px;
+            height: 46px;
+          }
+          
+          .toggle-button {
+            padding: 11px 30px;
+            font-size: 16px;
+            min-width: 145px;
+            height: 38px;
+          }
+          
+          .logo-circle {
+            width: 28px;
+            height: 28px;
+          }
+          
+          .logo-text {
+            font-size: 14px;
           }
         }
       `}</style>
       
-      <div className={`flex justify-center mt-6 ${className}`}>
-        <div 
-          className="relative bg-gray-100 dark:bg-gray-700 rounded-full p-1 shadow-inner"
+        <div
+          className={`toggle-container relative rounded-full shadow-lg hero-button-size ${className}`}
           role="tablist"
           aria-label="Toggle between Creators and Works"
         >
-          <div className="flex relative">
-            {/* Creators Button */}
+          {/* Inner Background */}
+          <div className="toggle-inner-bg"></div>
+          
+          {/* Sparkle Effects */}
+          <div className="sparkle-effect sparkle-1"></div>
+          <div className="sparkle-effect sparkle-2"></div>
+          <div className="sparkle-effect sparkle-3"></div>
+          <div className="sparkle-effect sparkle-4"></div>
+          
+          <div className="flex relative h-full">
+            {/* Animated Slider Background */}
+            <div 
+              className="slider-background"
+              style={{
+                left: isCreatorsActive ? '3px' : '50%',
+                transform: isCreatorsActive ? 'translateX(0)' : 'translateX(-3px)'
+              }}
+            >
+              {/* Logo/Icon in the center of the slider */}
+              
+            </div>
+
+          {/* Creators Button */}
             <button
               onClick={() => handleToggle('Creators')}
-              className={`
-                relative z-10 px-6 py-2 text-sm font-semibold rounded-full transition-all duration-300 ease-in-out
-                ${isCreatorsActive 
-                  ? 'text-red-700 dark:text-red-600' 
-                  : 'text-red-300 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300'
-                }
-                focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-700
-                sm:px-8 sm:py-3 sm:text-base
-              `}
+              className={`toggle-button rounded-full transition-all duration-300 ease-in-out flex items-center justify-center ${
+                isCreatorsActive 
+                  ? 'text-white' 
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
               role="tab"
               aria-selected={isCreatorsActive}
               aria-controls="creators-panel"
@@ -112,18 +539,14 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
               Creators
             </button>
 
-            {/* Works Button */}
+           {/* Works Button */}
             <button
               onClick={() => handleToggle('Works')}
-              className={`
-                relative z-10 px-6 py-2 text-sm font-semibold rounded-full transition-all duration-300 ease-in-out
-                ${isWorksActive 
+              className={`toggle-button rounded-full transition-all duration-300 ease-in-out flex items-center justify-center ${
+                isWorksActive 
                   ? 'text-white' 
-                  : 'text-orange-300 dark:text-orange-400 hover:text-orange-500 dark:hover:text-orange-300'
-                }
-                focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-700
-                sm:px-8 sm:py-3 sm:text-base
-              `}
+                  : 'text-gray-600 hover:text-gray-800'
+              }`}
               role="tab"
               aria-selected={isWorksActive}
               aria-controls="works-panel"
@@ -131,30 +554,6 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
             >
               Works
             </button>
-
-            {/* Animated Slider Background - Only visible when Works is active */}
-            {isWorksActive && (
-              <div 
-                className={`
-                  absolute top-1 right-1 bottom-1 w-1/2 
-                  bg-gradient-to-r from-orange-500 to-red-600 
-                  rounded-full shadow-lg
-                  ${isWorksActive ? 'slider-works' : 'slider-creators'}
-                  transition-all duration-300 ease-in-out
-                `}
-                style={{
-                  transform: isWorksActive ? 'translateX(0)' : 'translateX(-100%)'
-                }}
-              >
-                {/* Logo/Icon in the center of the slider */}
-                <div className="flex items-center justify-center h-full">
-                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center shadow-md">
-                    {/* Zadulis Logo - Using a simple "Z" for now, replace with actual logo */}
-                    <span className="text-orange-600 font-bold text-xs sm:text-sm">Z</span>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Screen reader content */}
@@ -167,10 +566,10 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
             </div>
           </div>
         </div>
-      </div>
     </>
   );
 };
+
 
 const glowAnimation = `
 @keyframes glow {
@@ -296,6 +695,11 @@ const gradientAnimation = `
   animation: fade-in-up 0.6s ease-out forwards;
 }
 
+.card-initial-hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
 @keyframes pinterest-skeleton-pulse {
   0% {
     background-position: -200px 0;
@@ -312,101 +716,338 @@ const gradientAnimation = `
 }
 `;
 
-// Pinterest-style masonry grid styles
+// Enhanced CSS Grid masonry styles with span functionality
+// Enhanced CSS Grid masonry styles with better responsiveness and visual appeal
 const masonryStyles = `
 .masonry-grid {
-  column-count: 1;
-  column-gap: 1.5rem;
-  padding: 1.5rem;
-}
-
-@media (min-width: 640px) {
-  .masonry-grid {
-    column-count: 2;
-  }
-}
-
-@media (min-width: 768px) {
-  .masonry-grid {
-    column-count: 3;
-  }
-}
-
-@media (min-width: 1024px) {
-  .masonry-grid {
-    column-count: 4;
-  }
-}
-
-@media (min-width: 1280px) {
-  .masonry-grid {
-    column-count: 5;
-  }
-}
-
-.masonry-item {
-  break-inside: avoid;
-  margin-bottom: 1.5rem;
-  display: inline-block;
-  width: 100%;
-}
-
-.work-card {
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  will-change: transform, box-shadow;
-}
-
-.work-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 140, 0, 0.3);
-}
-
-.work-card-image {
-  transition: transform 0.5s ease-in-out;
-}
-
-.work-card:hover .work-card-image {
-  transform: scale(1.05);
-}
-
-/* Pinterest-style vertical loading skeleton */
-.pinterest-loading-container {
-  display: flex;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  max-width: 1280px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-rows: 8px;
+  gap: 16px;
+  padding: 20px;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
-.pinterest-loading-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+/* Mobile First Approach */
+@media (max-width: 480px) {
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+    padding: 12px;
+    grid-auto-rows: 6px;
+  }
 }
 
-@media (max-width: 640px) {
-  .pinterest-loading-container {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .pinterest-loading-column {
-    gap: 1rem;
+@media (min-width: 481px) and (max-width: 640px) {
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+    padding: 16px;
+    grid-auto-rows: 7px;
   }
 }
 
 @media (min-width: 641px) and (max-width: 768px) {
-  .pinterest-loading-container {
-    gap: 1rem;
-  }
-  
-  .pinterest-loading-column {
-    gap: 1rem;
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 9px;
+    padding: 18px;
+    grid-auto-rows: 8px;
   }
 }
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .masonry-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+    padding: 20px;
+    grid-auto-rows: 9px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .masonry-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 9px;
+    padding: 24px;
+    grid-auto-rows: 10px;
+  }
+}
+
+@media (min-width: 1281px) and (max-width: 1536px) {
+  .masonry-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+    padding: 28px;
+    grid-auto-rows: 10px;
+  }
+}
+
+@media (min-width: 1537px) {
+  .masonry-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    padding: 32px;
+    grid-auto-rows: 12px;
+  }
+}
+
+.masonry-item {
+  grid-column: span 1;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.work-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, box-shadow;
+  height: fit-content;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  position: relative;
+}
+
+.work-card:hover {
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 140, 0, 0.1),
+    0 0 20px rgba(255, 140, 0, 0.2);
+  border-color: rgba(255, 140, 0, 0.3);
+}
+
+.work-card-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  object-fit: cover;
+}
+
+.work-card:hover .work-card-image {
+  transform: scale(1.08);
+}
+
+.work-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.3) 70%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  color: white;
+}
+
+.work-card:hover .work-card-overlay {
+  opacity: 1;
+}
+
+.work-card-info {
+  transform: translateY(20px);
+  transition: transform 0.3s ease-in-out;
+}
+
+.work-card:hover .work-card-info {
+  transform: translateY(0);
+}
+
+.work-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.work-card-subtitle {
+  font-size: 13px;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.work-card-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in-out;
+}
+
+.work-card:hover .work-card-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.work-card-action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.work-card-action-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+.work-card-action-btn svg {
+  width: 18px;
+  height: 18px;
+  color: #374151;
+}
+
+/* Enhanced Loading skeleton grid */
+.pinterest-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-auto-rows: 8px;
+  gap: 16px;
+  padding: 20px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  .pinterest-loading-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+    grid-auto-rows: 6px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+  .pinterest-loading-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 16px;
+    grid-auto-rows: 7px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .pinterest-loading-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 18px;
+    grid-auto-rows: 8px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .pinterest-loading-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    padding: 20px;
+    grid-auto-rows: 9px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .pinterest-loading-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 24px;
+    grid-auto-rows: 10px;
+  }
+}
+
+@media (min-width: 1281px) and (max-width: 1536px) {
+  .pinterest-loading-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 22px;
+    padding: 28px;
+    grid-auto-rows: 10px;
+  }
+}
+
+@media (min-width: 1537px) {
+  .pinterest-loading-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    padding: 32px;
+    grid-auto-rows: 12px;
+  }
+}
+
+.loading-masonry-item {
+  grid-column: span 1;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.pinterest-skeleton {
+  background: linear-gradient(
+    90deg,
+    #f8f9fa 25%,
+    #e9ecef 50%,
+    #f8f9fa 75%
+  );
+  background-size: 200px 100%;
+  animation: pinterest-skeleton-pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes pinterest-skeleton-pulse {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* Improved fade-in animation */
+@keyframes masonry-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.masonry-fade-in {
+  animation: masonry-fade-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Staggered animation delays */
+.masonry-item:nth-child(1) { animation-delay: 0ms; }
+.masonry-item:nth-child(2) { animation-delay: 100ms; }
+.masonry-item:nth-child(3) { animation-delay: 200ms; }
+.masonry-item:nth-child(4) { animation-delay: 300ms; }
+.masonry-item:nth-child(5) { animation-delay: 400ms; }
+.masonry-item:nth-child(6) { animation-delay: 500ms; }
+.masonry-item:nth-child(n+7) { animation-delay: 600ms; }
 `;
+
 
 function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -417,6 +1058,8 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [activeView, setActiveView] = useState<ToggleState>('Creators');
+  const [shuffledCreatorsForDisplay, setShuffledCreatorsForDisplay] = useState<Creator[]>([]); // New state for shuffled creators
+  const [shuffledWorksForDisplay, setShuffledWorksForDisplay] = useState<Creator[]>([]); // New state for shuffled works
   const creatorsPerPage = 16;
   const filterPanelRef = useRef<HTMLDivElement>(null);
   const [openFilter, setOpenFilter] = useState<string | null>(null);
@@ -448,35 +1091,64 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
     tag.toLowerCase().includes(styleTagsSearch.toLowerCase())
   );
 
+  // Effect to shuffle creators only once on initial load or when activeView changes to 'Creators'
+  useEffect(() => {
+    if (activeView === 'Creators' && shuffledCreatorsForDisplay.length === 0 && filters.length > 0) {
+      const shuffled = [...filters]; // Create a shallow copy
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setShuffledCreatorsForDisplay(shuffled);
+    } else if (activeView === 'Works' && shuffledCreatorsForDisplay.length > 0) {
+      // Clear shuffled creators if we switch back to Works view to save memory
+      setShuffledCreatorsForDisplay([]);
+    }
+  }, [activeView, filters, shuffledCreatorsForDisplay.length]);
+
   // Filter the creators based on search and filters
-  const filteredCreators = filters
+  const filteredCreators = (activeView === 'Creators' ? shuffledCreatorsForDisplay : filters)
     .filter(creator => {
-      const matchesSearch = searchTerm === '' || 
+      const matchesSearch = searchTerm === '' ||
         creator.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         creator.basedIn.toLowerCase().includes(searchTerm.toLowerCase()) ||
         creator.discipline.toLowerCase().includes(searchTerm.toLowerCase()) ||
         creator.countryOfOrigin.toLowerCase().includes(searchTerm.toLowerCase()) ||
         creator.styleTags?.some((tag: string) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-
+ 
       const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(creator.countryOfOrigin);
       const matchesDiscipline = selectedDisciplines.length === 0 || selectedDisciplines.includes(creator.discipline);
-      const matchesStyleTags = selectedStyleTags.length === 0 || 
+      const matchesStyleTags = selectedStyleTags.length === 0 ||
         selectedStyleTags.some(tag => creator.styleTags?.includes(tag));
-
+ 
       return matchesSearch && matchesLocation && matchesDiscipline && matchesStyleTags;
-    })
-    .sort((a, b) => a.id.localeCompare(b.id)); // Sort by ID in ascending order
-
+    });
+ 
   // Get current page creators
   const indexOfLastCreator = currentPage * creatorsPerPage;
   const indexOfFirstCreator = indexOfLastCreator - creatorsPerPage;
   const currentCreators = filteredCreators.slice(0, indexOfLastCreator);
   const hasMoreCreators = filteredCreators.length > indexOfLastCreator;
-
+ 
+  // Effect to shuffle works only once on initial load or when activeView changes to 'Works'
+  useEffect(() => {
+    if (activeView === 'Works' && shuffledWorksForDisplay.length === 0 && filters.length > 0) {
+      const shuffled = [...filters]; // Create a shallow copy
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setShuffledWorksForDisplay(shuffled);
+    } else if (activeView === 'Creators' && shuffledWorksForDisplay.length > 0) {
+      // Clear shuffled works if we switch back to Creators view to save memory
+      setShuffledWorksForDisplay([]);
+    }
+  }, [activeView, filters, shuffledWorksForDisplay.length]);
+ 
   // For Works view, use all available creators (not filtered by creator-specific filters)
-  const worksData = activeView === 'Works' ? 
-    filters.filter(creator => {
-      const matchesSearch = searchTerm === '' || 
+  const worksData = activeView === 'Works' ?
+    shuffledWorksForDisplay.filter(creator => {
+      const matchesSearch = searchTerm === '' ||
         creator.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         creator.basedIn.toLowerCase().includes(searchTerm.toLowerCase()) ||
         creator.discipline.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -485,21 +1157,17 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
       return matchesSearch;
     }).slice(0, currentPage * creatorsPerPage) : [];
 
-  // Generate random heights for Pinterest-style layout
-  const getRandomHeight = (index: number) => {
-    const heights = [200, 250, 300, 350, 400, 280, 320, 380];
-    return heights[index % heights.length];
+  // Calculate grid row span based on content height
+  const calculateRowSpan = (height: number) => {
+    const rowHeight = 20; // Base row height in pixels
+    const gap = 24; // Gap between items in pixels
+    return Math.ceil((height + gap) / rowHeight);
   };
 
-  // Calculate number of columns based on screen size
-  const getColumnCount = () => {
-    if (typeof window === 'undefined') return 4;
-    const width = window.innerWidth;
-    if (width < 640) return 1;
-    if (width < 768) return 2;
-    if (width < 1024) return 3;
-    if (width < 1280) return 4;
-    return 5;
+  // Generate consistent heights for items based on their index
+  const getItemHeight = (index: number) => {
+    const heights = [200, 250, 300, 350, 400, 280, 320, 380, 220, 360];
+    return heights[index % heights.length];
   };
 
   const handleLocationSelect = (location: string) => {
@@ -563,49 +1231,42 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
     </div>
   );
 
-  // Pinterest-style vertical loading skeleton
+  // Enhanced Pinterest-style loading skeleton with grid
   const MasonryLoadingSkeleton = () => {
-    const columnCount = getColumnCount();
     const totalItems = 20;
     
-    // Distribute items into columns vertically
-    const columns: number[][] = Array.from({ length: columnCount }, () => []);
-    
-    for (let i = 0; i < totalItems; i++) {
-      const columnIndex = i % columnCount;
-      columns[columnIndex].push(i);
-    }
-
     return (
-      <div className="pinterest-loading-container">
-        {columns.map((columnItems, columnIndex) => (
-          <div key={columnIndex} className="pinterest-loading-column">
-            {columnItems.map((itemIndex) => (
+      <div className="pinterest-loading-grid">
+        {[...Array(totalItems)].map((itemIndex) => {
+          const height = getItemHeight(itemIndex);
+          const rowSpan = calculateRowSpan(height + 120); // Add padding for content
+          
+          return (
+            <div 
+              key={itemIndex} 
+              className="loading-masonry-item bg-white rounded-xl shadow-lg overflow-hidden"
+              style={{
+                gridRowEnd: `span ${rowSpan}`,
+                animation: `fade-in-up 0.6s ease-out forwards`,
+                animationDelay: `${itemIndex * 50}ms`,
+                opacity: 0
+              }}
+            >
               <div 
-                key={itemIndex} 
-                className="bg-white rounded-xl shadow-lg overflow-hidden"
-                style={{
-                  animation: `fade-in-up 0.6s ease-out forwards`,
-                  animationDelay: `${itemIndex * 100}ms`,
-                  opacity: 0
-                }}
-              >
-                <div 
-                  className="w-full pinterest-skeleton" 
-                  style={{ height: `${getRandomHeight(itemIndex)}px` }}
-                />
-                <div className="p-3">
-                  <div className="h-4 pinterest-skeleton rounded w-3/4 mb-2" />
-                  <div className="h-3 pinterest-skeleton rounded w-1/2 mb-2" />
-                  <div className="flex flex-wrap gap-1">
-                    <div className="h-4 pinterest-skeleton rounded-full w-12" />
-                    <div className="h-4 pinterest-skeleton rounded-full w-16" />
-                  </div>
+                className="w-full pinterest-skeleton" 
+                style={{ height: `${height}px` }}
+              />
+              <div className="p-3">
+                <div className="h-4 pinterest-skeleton rounded w-3/4 mb-2" />
+                <div className="h-3 pinterest-skeleton rounded w-1/2 mb-2" />
+                <div className="flex flex-wrap gap-1">
+                  <div className="h-4 pinterest-skeleton rounded-full w-12" />
+                  <div className="h-4 pinterest-skeleton rounded-full w-16" />
                 </div>
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -658,45 +1319,43 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
     </div>
   );
 
-  // Pinterest-style loading more skeleton
+  // Enhanced Pinterest-style loading more skeleton with grid
   const MasonryLoadingMoreSkeleton = () => {
-    const columnCount = getColumnCount();
     const totalItems = 8;
     
-    // Distribute items into columns vertically
-    const columns: number[][] = Array.from({ length: columnCount }, () => []);
-    
-    for (let i = 0; i < totalItems; i++) {
-      const columnIndex = i % columnCount;
-      columns[columnIndex].push(i + 100); // Add offset to avoid key conflicts
-    }
-
     return (
-      <div className="pinterest-loading-container">
-        {columns.map((columnItems, columnIndex) => (
-          <div key={`more-${columnIndex}`} className="pinterest-loading-column">
-            {columnItems.map((itemIndex) => (
+      <div className="pinterest-loading-grid">
+        {[...Array(totalItems)].map((_, index) => {
+          const itemIndex = index + 100; // Offset to avoid key conflicts
+          const height = getItemHeight(itemIndex);
+          const rowSpan = calculateRowSpan(height + 120);
+          
+          return (
+            <div 
+              key={itemIndex} 
+              className="loading-masonry-item bg-white rounded-xl shadow-lg overflow-hidden"
+              style={{
+                gridRowEnd: `span ${rowSpan}`,
+                animation: `fade-in-up 0.6s ease-out forwards`,
+                animationDelay: `${index * 100}ms`,
+                opacity: 0
+              }}
+            >
               <div 
-                key={itemIndex} 
-                className="bg-white rounded-xl shadow-lg overflow-hidden"
-                style={{
-                  animation: `fade-in-up 0.6s ease-out forwards`,
-                  animationDelay: `${(itemIndex - 100) * 100}ms`,
-                  opacity: 0
-                }}
-              >
-                <div 
-                  className="w-full pinterest-skeleton" 
-                  style={{ height: `${getRandomHeight(itemIndex)}px` }}
-                />
-                <div className="p-3">
-                  <div className="h-4 pinterest-skeleton rounded w-3/4 mb-2" />
-                  <div className="h-3 pinterest-skeleton rounded w-1/2" />
+                className="w-full pinterest-skeleton" 
+                style={{ height: `${height}px` }}
+              />
+              <div className="p-3">
+                <div className="h-4 pinterest-skeleton rounded w-3/4 mb-2" />
+                <div className="h-3 pinterest-skeleton rounded w-1/2 mb-2" />
+                <div className="flex flex-wrap gap-1">
+                  <div className="h-4 pinterest-skeleton rounded-full w-12" />
+                  <div className="h-4 pinterest-skeleton rounded-full w-16" />
                 </div>
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     );
   };
@@ -888,6 +1547,70 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
         }
        `}</style>
 
+      <style jsx global>{`
+        .hero-button-size {
+          font-weight: 200;
+          letter-spacing: 0.025em;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          margin-left: auto; /* Added for horizontal centering when stacked */
+          margin-right: auto; /* Added for horizontal centering when stacked */
+        }
+
+        @media (max-width: 480px) {
+          .hero-button-size {
+            padding: 4px 12px;
+            font-size: 12px;
+            min-width: 70px;
+            height: 28px;
+          }
+        }
+
+        @media (min-width: 481px) and (max-width: 640px) {
+          .hero-button-size {
+            padding: 5px 14px;
+            font-size: 13px;
+            min-width: 80px;
+            height: 30px;
+          }
+        }
+
+        @media (min-width: 641px) and (max-width: 768px) {
+          .hero-button-size {
+            padding: 6px 20px;
+            font-size: 14px;
+            min-width: 100px;
+            height: 32px;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .hero-button-size {
+            padding: 7px 22px;
+            font-size: 14px;
+            min-width: 110px;
+            height: 34px;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .hero-button-size {
+            padding: 8px 24px;
+            font-size: 15px;
+            min-width: 120px;
+            height: 36px;
+          }
+        }
+
+        @media (min-width: 1280px) {
+          .hero-button-size {
+            padding: 9px 26px;
+            font-size: 15px;
+            min-width: 130px;
+            height: 36px;
+          }
+        }
+      `}</style>
+
       <div 
         ref={scrollContainerRef}
         className="filters scrollable-filters"
@@ -900,7 +1623,7 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
         }}
       >
         {/* Hero Section */}
-        <div className="relative bg-cover bg-center h-64 rounded-lg overflow-hidden mb-8">
+        <div className="relative bg-cover bg-center h-60 rounded-lg overflow-hidden mb-8">
           {/* Floating Images */}
           <div className="absolute -left-2 top-1/2  w-45 h-45 rounded-full overflow-hidden shadow-9xl animate-fun-float-1 animate-glow">
             <img src="https://us-west-2.graphassets.com/cmbfqm0kn1bab07n13z3ygjxo/output=format:jpg/resize=width:830/cmbmtgz88zkfc07lpaorfkiol" alt="Floating decoration" className="w-full h-full object-cover" />
@@ -910,12 +1633,12 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-orange-900/70 to-orange-900/60 flex items-center justify-center">
             <div className="text-center text-white">
-              <h1 className="text-2xl sm:text-4xl font-bold mb-2">DISCOVER AFRICA'S BOLDEST CREATORS</h1>
+              <h1 className="text-2xl sm:text-2xl md:text-2xl font-bold mb-2">DISCOVER AFRICA'S BOLDEST CREATORS</h1>
               <p className="text-sm sm:text-lg mb-4">Browse and connect with a new generation of African artists, designers, and culture-makers.</p>
               <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <button 
                   onClick={scrollToFilters}
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-full hover:from-green-600 hover:to-emerald-700 transition-all duration-300 flex items-center shadow-lg hover:shadow-xl relative group border-2 border-transparent hover:border-green-400"
+                  className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full hover:from-green-600 hover:to-emerald-700 transition-all duration-300 flex items-center shadow-lg hover:shadow-xl relative group border-2 border-transparent hover:border-green-400 hero-button-size mx-5"
                 >
                   <div className="absolute inset-0 rounded-full bg-green-400 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300"></div>
                   <div className="absolute inset-0 rounded-full bg-green-400 opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-300"></div>
@@ -927,7 +1650,13 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                     Start Exploring
                   </div>
                 </button>
-                <button className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white px-4 py-2 rounded-full hover:from-yellow-600 hover:to-amber-700 transition-all duration-500 flex items-center shadow-lg hover:shadow-xl relative group border-2 border-transparent hover:border-orange-200">
+                              {/* Toggle Switch */}
+        <ToggleSwitch
+          onToggle={handleToggleChange}
+          defaultState="Creators"
+          className="mx-5"
+        />
+                <button className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-full hover:from-yellow-600 hover:to-amber-700 transition-all duration-500 flex items-center shadow-lg hover:shadow-xl relative group border-2 border-transparent hover:border-orange-200 hero-button-size">
                   <div className="absolute inset-0 rounded-full bg-orange-400 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500"></div>
                   <div className="absolute inset-0 rounded-full bg-orange-400 opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500"></div>
                   <div className="absolute -inset-[2px] rounded-full bg-gradient-to-r from-orange-400 to-amber-500 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
@@ -941,12 +1670,7 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                   </div>
                 </button>
               </div>
-              {/* Toggle Switch */}
-        <ToggleSwitch 
-          onToggle={handleToggleChange}
-          defaultState="Creators"
-          className="pt-4 mt-4 sm:mt-6"
-        />
+            
             </div>
           </div>
         </div>
@@ -954,7 +1678,7 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
         
 
         {/* Search and Filter Panel */}
-        <div ref={filterPanelRef} className="sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md p-3 z-10 max-w-xl mx-auto rounded-xl border-2 border-transparent hover:border-orange-500 hover:shadow-[0_0_15px_rgba(255,140,0,0.3)] transition-all duration-500 animate-glow">
+        <div ref={filterPanelRef} className="sticky top-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md p-2 sm:p-3 z-10 max-w-sm mx-auto lg:max-w-xl rounded-xl border-2 border-transparent hover:border-orange-500 hover:shadow-[0_0_15px_rgba(255,140,0,0.3)] transition-all duration-500 animate-glow">
           <button
             onClick={() => setIsFiltersOpen(!isFiltersOpen)}
             className="w-full flex items-center justify-between p-1.5 mb-1.5 text-gray-400 hover:text-gray-500 transition-colors duration-200"
@@ -983,8 +1707,6 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                 />
               </div>
 
-              {/* Filters Grid - Only show when Creators view is active */}
-              {activeView === 'Creators' && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2 ">
                 {/* Location Filter */}
                 <div className="relative">
@@ -1220,7 +1942,6 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                   )}
                 </div>
                 </div>
-              )}
             </div>
           </div>
         </div>
@@ -1250,7 +1971,7 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                     <>
                       {currentCreators.map((creatorProfile, index) => (
                         <Link href={`/discover/details/${creatorProfile.id}`} key={index}>
-                          <div className="creator-card bg-white/20 backdrop-blur-sm rounded-xl shadow-md overflow-hidden border border-white/60" style={{ opacity: 0 }}>
+                          <div className="creator-card bg-white/20 backdrop-blur-sm rounded-xl shadow-md overflow-hidden border border-white/60 card-initial-hidden">
                             <div className="relative overflow-hidden">
                               <img src={creatorProfile.profilePhoto.url} alt={creatorProfile.fullName} className="creator-card-image w-full h-55 object-cover" />
                             </div>
@@ -1289,61 +2010,55 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                   )}
                 </div>
               ) : (
-                // Works view with Pinterest-style masonry grid
-                <div className="masonry-grid max-w-7xl mx-auto">
-                  {worksData.length === 0 ? (
-                    <div className="col-span-full text-center py-12">
-                      <p className="text-gray-500 text-lg">No works found matching your criteria</p>
-                    </div>
-                  ) : (
-                    <>
-                      {worksData.map((creatorProfile, index) => (
-                        <div key={`work-${creatorProfile.id}-${index}`} className="masonry-item">
-                          <Link href={`/discover/details/${creatorProfile.id}`}>
-                            <div className="work-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:border-orange-300">
-                              <div className="relative overflow-hidden">
-                                <img 
-                                  src={creatorProfile.profilePhoto.url} 
-                                  alt={`Work by ${creatorProfile.fullName}`} 
-                                  className="work-card-image w-full object-cover" 
-                                  style={{ height: `${getRandomHeight(index)}px` }}
-                                />
-                                {/* Overlay with creator info */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
-                                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                                    <h3 className="font-semibold text-sm mb-1">{creatorProfile.fullName}</h3>
-                                    <p className="text-xs opacity-90">{creatorProfile.discipline}</p>
+                // Works view with enhanced CSS Grid masonry
+                <>
+                  <div className="masonry-grid">
+                    {worksData.length === 0 ? (
+                      <div className="col-span-full text-center py-12">
+                        <p className="text-gray-500 text-lg">No works found matching your criteria</p>
+                      </div>
+                    ) : (
+                      <>
+                        {worksData.map((creatorProfile, index) => {
+                          const height = getItemHeight(index);
+                          const rowSpan = calculateRowSpan(height + 120); // Add padding for content
+                          
+                          return (
+                            <div 
+                              key={`work-${creatorProfile.id}-${index}`} 
+                              className="masonry-item"
+                              style={{
+                                gridRowEnd: `span ${rowSpan}`
+                              }}
+                            >
+                              <Link href={`/discover/details/${creatorProfile.id}`}>
+                                <div className="work-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:border-orange-300 card-initial-hidden">
+                                  <div className="relative overflow-hidden">
+                                    <img
+                                      src={creatorProfile.works[0]?.url}
+                                      alt={`Work by ${creatorProfile.fullName}`}
+                                      className="work-card-image w-full object-cover"
+                                      style={{ height: `${height}px` }}
+                                    />
+                                    {/* Overlay with creator info */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
+                                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                                        <h3 className="font-semibold text-sm mb-1">{creatorProfile.fullName}</h3>
+                                        <p className="text-xs opacity-90">{creatorProfile.discipline}</p>
+                                      </div>
+                                    </div>
                                   </div>
+                                 
                                 </div>
-                              </div>
-                              <div className="p-3">
-                                <h4 className="font-medium text-gray-800 text-sm mb-1 line-clamp-2">
-                                 {creatorProfile.fullName}
-                                </h4>
-                                <p className="text-xs text-gray-600 mb-2">
-                                  {creatorProfile.basedIn}
-                                </p>
-                                <div className="flex flex-wrap gap-1">
-                                  {creatorProfile.styleTags.slice(0, 2).map((tag: string, i: number) => (
-                                    <span key={i} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded-full">
-                                      #{tag}
-                                    </span>
-                                  ))}
-                                  {creatorProfile.styleTags.length > 2 && (
-                                    <span className="text-xs text-gray-500">
-                                      +{creatorProfile.styleTags.length - 2} more
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
+                              </Link>
                             </div>
-                          </Link>
-                        </div>
-                      ))}
-                      {isLoadingMore && <MasonryLoadingMoreSkeleton />}
-                    </>
-                  )}
-                </div>
+                          );
+                        })}
+                      </>
+                    )}
+                  </div>
+                  {isLoadingMore && <MasonryLoadingMoreSkeleton />}
+                </>
               )}
             </>
           )}
