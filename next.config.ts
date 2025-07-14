@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
       'us-west-2.graphassets.com'
     ],
   },
+// Optimize font loading
+  experimental: {
+    optimizeCss: true,
+  },
+  // Ensure static assets are properly served
+  assetPrefix: process.env.NODE_ENV === 'production' ? undefined : '',
 };
 
 export default nextConfig;
