@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Syne } from "next/font/google";
 import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
+import { satoshi } from "./fonts/satoshi";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -26,8 +27,9 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.cdnfonts.com/css/satoshi?styles=135009,135005,135007,135002,135000" rel="stylesheet" />
       </head>
-      <body className={`${syne.variable} font-sans antialiased`}>
+      <body className={`${syne.variable} ${satoshi.variable} font-sans antialiased`}>
         <TRPCReactProvider>
           {children}
         </TRPCReactProvider>

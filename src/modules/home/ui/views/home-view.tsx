@@ -409,7 +409,7 @@ export const HomeView = () => {
       />
         {/* Top Bar (Header) */}
         <div className="flex justify-between items-center mb-6 relative z-10">
-          <h1 className="text-lg font-bold border-white-200/40" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>{greeting}, {userName} <span className="text-base font-normal ml-2">{formattedTime}</span></h1>
+          <h1 className="text-lg font-medium border-white-200/40" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>{greeting}, {userName} <span className="text-base font-normal ml-2">{formattedTime}</span></h1>
           <div className="flex items-center space-x-4">
             <div className="relative w-80s">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 " />
@@ -436,8 +436,8 @@ export const HomeView = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-[#FF7F00]/40 to-[#E64A19]/40 opacity-90 rounded-xl"></div>
               <img src={selectedFeaturedCreator.profilePhoto?.url || selectedFeaturedCreator.image} alt={selectedFeaturedCreator.fullName || selectedFeaturedCreator.name} className="absolute inset-0 w-full h-full object-cover opacity-50 rounded-xl" />
               <div className="relative z-10 flex flex-col h-full justify-end">
-                <h3 className="text-lg font-extrabold ">Creator Of The Week</h3>
-                <h4 className="text-4xl font-extrabold mb-4">{selectedFeaturedCreator.fullName || selectedFeaturedCreator.name}</h4>
+                <h3 className="text-lg font-bold ">Creator Of The Week</h3>
+                <h4 className="text-6xl sm:text-4xl md:text-7xl lg:text-7xl font-extrabold mb-4">{selectedFeaturedCreator.fullName || selectedFeaturedCreator.name}</h4>
                 <Badge variant="secondary" className="bg-white text-[#FF7F00] rounded-full px-3 py-1 text-sm font-semibold self-start mb-3">
                   {selectedFeaturedCreator.category || selectedFeaturedCreator.discipline}
                 </Badge>
@@ -464,7 +464,7 @@ export const HomeView = () => {
                 </div>
                 <div className="flex items-center mb-6">
                   <Star className="h-5 w-5 text-yellow-400 fill-yellow-400 mr-1 star-glow" />
-                  <span className="text-lg font-semibold">+ 5 STARS FROM ZADULIS</span>
+                  <span className="text-xl font-bold">+ 5 Stars From Zadulis</span>
                 </div>
                 <div className="flex gap-2">
                   <Button

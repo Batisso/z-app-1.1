@@ -1,11 +1,57 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "tailwindcss";
-@import "tw-animate-css";
 @import url('https://geistsans.com/font.css');
 
+/* Ensure Satoshi is the default font and prevent FOIT */
+html {
+  font-family: var(--font-satoshi), var(--font-syne), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 body {
-  font-family: var(--font-syne), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-satoshi), var(--font-syne), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* Prevent invisible text during font load */
+  font-display: swap; /* Use swap to show fallback text immediately */
+}
+
+/* Force font loading for critical text elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-satoshi), var(--font-syne), system-ui, sans-serif;
+}
+
+/* Ensure all text elements use Satoshi */
+p, span, div, a, button, input, textarea, label {
+  font-family: inherit;
+}
+
+/* Font loading optimization - prevent layout shift */
+.font-satoshi {
+  font-family: var(--font-satoshi), var(--font-syne), system-ui, sans-serif;
+}
+
+/* Ensure custom font sizes work immediately */
+[class*="text-["] {
+  font-family: var(--font-satoshi), var(--font-syne), system-ui, sans-serif;
+}
+
+/* Font loading states */
+.fonts-loading {
+  /* Ensure text is visible during font load */
+  font-display: swap;
+}
+
+.fonts-loaded {
+  /* Smooth transition when fonts are loaded */
+  transition: font-family 0.1s ease-in-out;
+}
+
+/* Prevent layout shift during font loading */
+.fonts-loading [class*="text-["] {
+  font-family: var(--font-satoshi), var(--font-syne), system-ui, sans-serif;
+  font-display: swap;
+}
+
+.fonts-loaded [class*="text-["] {
+  font-family: var(--font-satoshi), var(--font-syne), system-ui, sans-serif;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -326,4 +372,76 @@ body {
     0 0 10px #ffc65d,
     0 0 15px #ffc65d,
     0 0 20px #ffc65d;
+}
+
+@keyframes breathing {
+  0% { opacity: 0.7; filter: blur(4px); }
+  50% { opacity: 1; filter: blur(2px); }
+  100% { opacity: 0.7; filter: blur(4px); }
+}
+.animate-breathing {
+  animation: breathing 2.5s ease-in-out infinite;
+}
+.loading-bg {
+  opacity: 0.7;
+}
+.loading-block {
+  background: #fff;
+  opacity: 0.3;
+  border-radius: 1rem;
+  min-height: 2rem;
+}
+
+@keyframes rotate-slow {
+  0% { transform: scale(1.1) rotate(0deg); }
+  100% { transform: scale(1.1) rotate(360deg); }
+}
+.animate-rotate-slow {
+  animation: rotate-slow 40s linear infinite;
+}
+#events-scroll::-webkit-scrollbar {
+  height: 8px;
+  background: transparent;
+}
+#events-scroll::-webkit-scrollbar-thumb {
+  background: #FF7F00;
+  border-radius: 8px;
+}
+#events-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+#blogs-scroll::-webkit-scrollbar {
+  height: 8px;
+  background: transparent;
+}
+#blogs-scroll::-webkit-scrollbar-thumb {
+  background: #FF7F00;
+  border-radius: 8px;
+}
+#blogs-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-bg {
+  background: rgba(0,0,0,0.6);
+}
+.modal-animate {
+  animation: modalIn 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes modalIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes glow {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(255, 255, 0, 0.6)) drop-shadow(0 0 10px rgba(255, 255, 0, 0.4)); }
+  50% { filter: drop-shadow(0 0 15px rgba(255, 255, 0, 1)) drop-shadow(0 0 20px rgba(255, 255, 0, 0.8)); }
+}
+.star-glow {
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+@keyframes bounce-horizontal {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+}
+.animate-bounce-horizontal {
+  animation: bounce-horizontal 1s infinite alternate;
 }

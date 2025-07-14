@@ -63,8 +63,45 @@ export const DiscoverView = () => {
                             <div className="h-4 bg-gray-300/80 rounded w-1/2 mx-auto mb-4"></div>
                             <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
                                 <div className="h-10 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full w-32 shadow-lg"></div>
+                                {/* Toggle Switch Loading State */}
+                                <div className="relative rounded-full shadow-lg bg-gray-300/80 animate-pulse mx-5" style={{
+                                    padding: '4px',
+                                    minWidth: '280px',
+                                    height: '44px'
+                                }}>
+                                    <div className="flex relative h-full">
+                                        {/* Animated Slider Background */}
+                                        <div 
+                                            className="absolute top-1 bottom-1 w-1/2 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full shadow-md transition-all duration-600 ease-out"
+                                            style={{
+                                                left: '3px',
+                                                animation: 'slideToggle 2s ease-in-out infinite alternate'
+                                            }}
+                                        />
+                                        {/* Creators Button Skeleton */}
+                                        <div className="flex-1 flex items-center justify-center">
+                                            <div className="h-4 bg-gray-400/60 rounded w-16"></div>
+                                        </div>
+                                        {/* Works Button Skeleton */}
+                                        <div className="flex-1 flex items-center justify-center">
+                                            <div className="h-4 bg-gray-400/60 rounded w-12"></div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="h-10 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full w-32 shadow-lg"></div>
                             </div>
+                            <style jsx>{`
+                                @keyframes slideToggle {
+                                    0% {
+                                        left: 3px;
+                                        transform: translateX(0);
+                                    }
+                                    100% {
+                                        left: 50%;
+                                        transform: translateX(-3px);
+                                    }
+                                }
+                            `}</style>
                         </div>
                     </div>
                 </div>

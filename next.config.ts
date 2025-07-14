@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
       'us-west-2.graphassets.com'
     ],
   },
-// Optimize font loading
+  // Optimize font loading
   experimental: {
     optimizeCss: true,
   },

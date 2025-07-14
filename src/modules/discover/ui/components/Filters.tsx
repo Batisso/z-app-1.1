@@ -1633,8 +1633,8 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-orange-900/70 to-orange-900/60 flex items-center justify-center">
             <div className="text-center text-white">
-              <h1 className="text-2xl sm:text-2xl md:text-2xl font-bold mb-2">DISCOVER AFRICA'S BOLDEST CREATORS</h1>
-              <p className="text-sm sm:text-lg mb-4">Browse and connect with a new generation of African artists, designers, and culture-makers.</p>
+              <h1 className="text-2xl sm:text-2xl md:text-2xl lg:text-4xl font-bold mb-2">DISCOVER THE WORLDS BOLDEST CREATORS</h1>
+              <p className="text-sm sm:text-lg mb-4">Browse and connect with a new generation of global artists, designers, and culture-makers.</p>
               <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <button 
                   onClick={scrollToFilters}
@@ -1647,7 +1647,7 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
-                    Start Exploring
+                    <p className='font-medium'>Start Exploring</p>
                   </div>
                 </button>
                               {/* Toggle Switch */}
@@ -1666,7 +1666,7 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    Become a Creator
+                    <p className='font-medium'>Become a Creator</p>
                   </div>
                 </button>
               </div>
