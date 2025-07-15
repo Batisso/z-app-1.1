@@ -51,6 +51,7 @@ const firstSection = [
         label: "Shop",
         href: "/shop",
     },
+
 ];
 
 

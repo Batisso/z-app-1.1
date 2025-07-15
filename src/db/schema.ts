@@ -176,6 +176,7 @@ export const comments: any = pgTable("comments", {
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
+
 export const votes = pgTable("votes", {
   id: text('id').primaryKey().$defaultFn(() => nanoid()),
   userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
@@ -183,4 +184,17 @@ export const votes = pgTable("votes", {
   commentId: text('comment_id').references(() => comments.id, { onDelete: 'cascade' }),
   type: text('type').notNull(), // 'up' or 'down'
   createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const become_a_Creator = pgTable("become-a-creator", {
+  id: text('id')
+  .primaryKey()
+  .$defaultFn(() => nanoid()),
+  name: text('name').notNull(),
+  userId: text('user_id')
+  .notNull()
+  .references(() => user.id, { onDelete: 'cascade' }),
+  instructions: text('instructions').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });

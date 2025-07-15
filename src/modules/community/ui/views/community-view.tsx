@@ -712,7 +712,7 @@ export const CommunityView = () => {
 
     // Handle loading state - no error state since we fallback to empty array
     if (isLoading && safePosts.length === 0) {
-        return <LoadingState title="Loading Posts..." />;
+        return <LoadingState title="Loading..." />;
     }
 
     return (
