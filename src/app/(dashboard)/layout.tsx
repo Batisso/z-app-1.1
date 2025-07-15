@@ -10,7 +10,7 @@ interface Props {
 const Layout = ({ children }: Props) => {
     return (
         <SidebarProvider>
-            <div className="h-screen w-full bg-muted rounded-4xl 2xl:flex">
+            <div className="h-screen w-full rounded-4xl 2xl:flex">
                 <DashboardSidebar />
                 <main className="flex-1 flex flex-col w-full">
                     {children}

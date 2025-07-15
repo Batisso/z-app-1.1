@@ -411,14 +411,82 @@ export const HomeView = () => {
         <div className="flex justify-between items-center mb-6 relative z-10">
           <h1 className="text-lg font-medium border-white-200/40" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>{greeting}, {userName} <span className="text-base font-normal ml-2">{formattedTime}</span></h1>
           <div className="flex items-center space-x-4">
-            <div className="relative w-80s">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 " />
-              <Input
-                type="text"
-                placeholder="Search for creators, events, blogs..."
-                className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FF7F00] focus:border-transparent"
-              />
-            </div>
+            <button 
+              className="relative group px-6 py-2 rounded-full overflow-hidden transition-all duration-500 hover:scale-105"
+              onClick={() => router.push('/become-a-creator')}
+            >
+              {/* Liquid Glass Background */}
+              <div className="absolute inset-0 rounded-full bg-white/10 backdrop-blur-md border border-white/20 transition-all duration-500 group-hover:bg-white/20 group-hover:border-white/30">
+                {/* SVG Filter for Liquid Glass Effect */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <filter id="liquid-glass-filter" colorInterpolationFilters="sRGB">
+                      <feImage 
+                        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='50'%3E%3Cdefs%3E%3CradialGradient id='grad' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' stop-color='%23ffffff' stop-opacity='0.8'/%3E%3Cstop offset='100%25' stop-color='%23000000' stop-opacity='0.2'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3C/svg%3E"
+                        x="0" y="0" width="100%" height="100%" result="map"
+                      />
+                      <feDisplacementMap 
+                        in="SourceGraphic" in2="map" 
+                        scale="20" xChannelSelector="R" yChannelSelector="B" 
+                        result="dispRed"
+                      />
+                      <feColorMatrix 
+                        in="dispRed" type="matrix" 
+                        values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" 
+                        result="red"
+                      />
+                      <feDisplacementMap 
+                        in="SourceGraphic" in2="map" 
+                        scale="15" xChannelSelector="R" yChannelSelector="B" 
+                        result="dispGreen"
+                      />
+                      <feColorMatrix 
+                        in="dispGreen" type="matrix" 
+                        values="0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0" 
+                        result="green"
+                      />
+                      <feDisplacementMap 
+                        in="SourceGraphic" in2="map" 
+                        scale="25" xChannelSelector="R" yChannelSelector="B" 
+                        result="dispBlue"
+                      />
+                      <feColorMatrix 
+                        in="dispBlue" type="matrix" 
+                        values="0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0" 
+                        result="blue"
+                      />
+                      <feBlend in="red" in2="green" mode="screen" result="rg"/>
+                      <feBlend in="rg" in2="blue" mode="screen" result="output"/>
+                      <feGaussianBlur in="output" stdDeviation="0.5"/>
+                    </filter>
+                  </defs>
+                </svg>
+              </div>
+
+             
+
+              {/* Liquid Glass Overlay */}
+              <div 
+                className="absolute inset-0 rounded-full bg-white/5 backdrop-blur-sm transition-all duration-500 group-hover:bg-white/10"
+                style={{ filter: 'url(#liquid-glass-filter)' }}
+              ></div>
+
+              {/* Shimmer Effect */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 transform -skew-x-12 group-hover:animate-pulse"></div>
+
+              {/* Border Gradient */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/90 via-transparent to-yellow-400/90 p-[1px] group-hover:from-orange-300/70 group-hover:to-orange-300/70 transition-all duration-500">
+                <div className="w-full h-full rounded-full bg-transparent"></div>
+              </div>
+
+              {/* Content */}
+              <div className="relative z-10 flex items-center text-white font-medium">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                <span>Become a Creator</span>
+              </div>
+            </button>
             <Avatar className="h-10 w-10 border-2 border-[#FF7F00]">
               <AvatarImage src={data?.user?.image || undefined} alt={userName} />
               <AvatarFallback>{userName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
@@ -661,7 +729,16 @@ export const HomeView = () => {
 
           {/* Blogs / Blog Feed */}
           <div className="col-span-3 relative z-10 mt-12">
-            <h3 className="text-xl font-bold mb-4" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>Latest Blogs</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>Latest Blogs</h3>
+              <Button 
+                className="bg-white/80 backdrop-blur-sm text-[#FF7F00] hover:bg-[#FF7F00] hover:text-white border border-[#FF7F00]/30 hover:border-[#FF7F00] rounded-full px-4 py-2 text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
+                onClick={() => router.push('/blogs')}
+              >
+                Show More
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
+            </div>
             <div className="relative w-full">
               {/* Scroll Buttons */}
               <button

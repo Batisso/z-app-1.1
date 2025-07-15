@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { LoadingState } from "@/components/loading-state";
 import { ErrorState } from "@/components/error-state";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -64,6 +64,17 @@ export const CommunityView = () => {
     const [leaveCommunityId, setLeaveCommunityId] = useState<string | null>(null);
     // Comments bounce animation state
     const [isCommentsBouncing, setIsCommentsBouncing] = useState(false);
+    // Image upload error state
+    const [imageUploadError, setImageUploadError] = useState<string | null>(null);
+    // Image cropping state
+    const [showImageCropper, setShowImageCropper] = useState(false);
+    const [originalImage, setOriginalImage] = useState<string | null>(null);
+    const [cropPosition, setCropPosition] = useState({ x: 0, y: 0 });
+    const [cropScale, setCropScale] = useState(1);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     // State to track joined circles - always loaded from Supabase
     const [joinedCircles, setJoinedCircles] = useState<string[]>([]);
@@ -92,6 +103,7 @@ export const CommunityView = () => {
     }, [joinedCirclesData]);
 
     // Queries
+    // Queries with performance optimizations
     const { data: communities, refetch: refetchCommunities, error: communitiesError } = useQuery({
         queryKey: ['community', 'getMany'],
         queryFn: async () => {
@@ -103,13 +115,23 @@ export const CommunityView = () => {
                 throw error;
             }
         },
-        retry: 3,
-        retryDelay: 1000,
+        retry: 2, // Reduced retries for faster loading
+        retryDelay: 500, // Faster retry
+        staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+        gcTime: 1000 * 60 * 10, // Keep in cache for 10 minutes
+        refetchOnWindowFocus: false, // Prevent unnecessary refetches
     });
 
-    // Derive the selected community name
-    const currentCommunity = communities?.find((c: any) => c.id === selectedCommunity);
-    const currentCommunityName = selectedCommunity === 'all' ? 'All Communities' : currentCommunity?.name || '';
+    // Memoized community calculations
+    const currentCommunity = useMemo(() => 
+        communities?.find((c: any) => c.id === selectedCommunity), 
+        [communities, selectedCommunity]
+    );
+    
+    const currentCommunityName = useMemo(() => 
+        selectedCommunity === 'all' ? 'All Communities' : currentCommunity?.name || '', 
+        [selectedCommunity, currentCommunity]
+    );
 
     const { data: posts, isLoading, error: postsError } = useQuery({
         queryKey: ['community', 'getPosts', { communityId: selectedCommunity, sortBy }],
@@ -123,12 +145,11 @@ export const CommunityView = () => {
                 return [];
             }
         },
-        retry: (failureCount, error) => {
-            return failureCount < 1; // Only retry once for faster loading
-        },
-        retryDelay: 500, // Reduce retry delay to 500ms
-        staleTime: 1000 * 60 * 1, // Cache for 1 minute (shorter for All Circles)
-        gcTime: 1000 * 60 * 3, // Keep in cache for 3 minutes
+        retry: 1, // Only retry once for faster loading
+        retryDelay: 300, // Faster retry delay
+        staleTime: 1000 * 60 * 2, // Cache for 2 minutes
+        gcTime: 1000 * 60 * 5, // Keep in cache for 5 minutes
+        refetchOnWindowFocus: false, // Prevent unnecessary refetches
     });
 
     const { data: comments } = useQuery({
@@ -705,10 +726,163 @@ export const CommunityView = () => {
         setOpenReplies((prev) => ({ ...prev, [commentId]: !prev[commentId] }));
     };
 
+    // Image cropping functions
+    const handleCropMouseDown = (e: React.MouseEvent) => {
+        setIsDragging(true);
+        setDragStart({
+            x: e.clientX - cropPosition.x,
+            y: e.clientY - cropPosition.y
+        });
+    };
+
+    const handleCropMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging) return;
+        
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
+        
+        // Constrain movement within bounds
+        const maxX = 100;
+        const maxY = 100;
+        const minX = -100;
+        const minY = -100;
+        
+        setCropPosition({
+            x: Math.max(minX, Math.min(maxX, newX)),
+            y: Math.max(minY, Math.min(maxY, newY))
+        });
+    };
+
+    const handleCropMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const handleCropImage = async () => {
+        if (!originalImage || isProcessing) return;
+        
+        setIsProcessing(true);
+        
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            await new Promise((resolve, reject) => {
+                img.onload = () => {
+                    const size = 300; // Output size
+                    canvas.width = size;
+                    canvas.height = size;
+                    
+                    if (ctx) {
+                        // Calculate crop area
+                        const scale = Math.max(img.width, img.height) / 300;
+                        const scaledWidth = img.width / scale * cropScale;
+                        const scaledHeight = img.height / scale * cropScale;
+                        
+                        const sourceX = Math.max(0, (img.width - scaledWidth) / 2 - cropPosition.x * scale);
+                        const sourceY = Math.max(0, (img.height - scaledHeight) / 2 - cropPosition.y * scale);
+                        const sourceWidth = Math.min(scaledWidth, img.width - sourceX);
+                        const sourceHeight = Math.min(scaledHeight, img.height - sourceY);
+                        
+                        // Draw cropped image
+                        ctx.drawImage(
+                            img,
+                            sourceX, sourceY, sourceWidth, sourceHeight,
+                            0, 0, size, size
+                        );
+                        
+                        resolve(true);
+                    } else {
+                        reject(new Error('Canvas context not available'));
+                    }
+                };
+                img.onerror = reject;
+                img.src = originalImage;
+            });
+            
+            // Convert to base64
+            const croppedImage = canvas.toDataURL('image/jpeg', 0.9);
+            setCommunityImage(croppedImage);
+            setShowImageCropper(false);
+            setOriginalImage(null);
+            setImageLoaded(false);
+        } catch (error) {
+            console.error('Error cropping image:', error);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    // Reset image loaded state when cropper opens
+    useEffect(() => {
+        if (showImageCropper && originalImage) {
+            setImageLoaded(false);
+        }
+    }, [showImageCropper, originalImage]);
+
     // Removed the old handleCreateCommunity function as it's replaced by handleCreateCommunityClick
 
-    // Ensure posts is defined (fallback to empty array)
-    const safePosts = Array.isArray(posts) ? posts : [];
+    // Memoized calculations for better performance
+    const safePosts = useMemo(() => Array.isArray(posts) ? posts : [], [posts]);
+    
+    // Memoized filtered communities for search
+    const filteredCommunities = useMemo(() => 
+        communities?.filter((community: any) =>
+            community.name.toLowerCase().includes(searchQuery.toLowerCase())
+        ) || [], 
+        [communities, searchQuery]
+    );
+
+    // Memoized community likes calculation
+    const communityLikes = useMemo(() => {
+        const likes: Record<string, number> = {};
+        if (communities && safePosts) {
+            safePosts.forEach((post: any) => {
+                if (post.community_id) {
+                    likes[post.community_id] = (likes[post.community_id] || 0) + (post.upvotes || 0);
+                }
+            });
+        }
+        return likes;
+    }, [communities, safePosts]);
+
+    // Memoized sorted communities for sidebar
+    const sortedCommunities = useMemo(() => 
+        (communities || [])
+            .map((community: any) => ({
+                ...community,
+                totalLikes: communityLikes[community.id] || 0
+            }))
+            .sort((a: any, b: any) => b.totalLikes - a.totalLikes)
+            .slice(0, 5),
+        [communities, communityLikes]
+    );
+
+    // Memoized user posts for sidebar
+    const userPosts = useMemo(() => 
+        safePosts.filter((post: any) => post.author === userName).slice(0, 3),
+        [safePosts, userName]
+    );
+
+    // Memoized total user likes
+    const totalUserLikes = useMemo(() => 
+        safePosts.filter((post: any) => post.author === userName)
+            .reduce((total: number, post: any) => total + (post.upvotes || 0), 0),
+        [safePosts, userName]
+    );
+
+    // Optimized callbacks
+    const handleCommunitySelect = useCallback((communityId: string) => {
+        setSelectedCommunity(communityId);
+    }, []);
+
+    const handlePrefetchCommunity = useCallback((communityId: string) => {
+        queryClient.prefetchQuery({
+            queryKey: ['community', 'getPosts', { communityId, sortBy }],
+            queryFn: () => postService.getByCommunitySorted(communityId, sortBy),
+            staleTime: 1000 * 60 * 1, // Cache for 1 minute
+        });
+    }, [queryClient, sortBy]);
 
     // Handle loading state - no error state since we fallback to empty array
     if (isLoading && safePosts.length === 0) {
@@ -732,6 +906,7 @@ export const CommunityView = () => {
                     setCommunityImage('');
                     setCommunityUrl('');
                     setCommunitySlug('');
+                    setImageUploadError(null);
                 }}
                 onCreatePostClick={() => {
                     setPostTitle('');
@@ -742,7 +917,21 @@ export const CommunityView = () => {
                     setEditingPostId(null);
                 }}
                 communityDialog={
-                    <DialogContent className="max-w-lg w-full">
+                    <DialogContent 
+                        className="max-w-lg w-full"
+                        onPointerDownOutside={(e) => {
+                            // Prevent dialog from closing when image cropper is open
+                            if (showImageCropper) {
+                                e.preventDefault();
+                            }
+                        }}
+                        onEscapeKeyDown={(e) => {
+                            // Prevent dialog from closing with Escape when image cropper is open
+                            if (showImageCropper) {
+                                e.preventDefault();
+                            }
+                        }}
+                    >
                         <DialogHeader>
                             <DialogTitle>{isEditMode ? 'Edit Circle' : 'Create New Circle'}</DialogTitle>
                             <DialogDescription>{isEditMode ? 'Update your circle details' : 'Create a new circle to share posts with others.'}</DialogDescription>
@@ -776,19 +965,97 @@ export const CommunityView = () => {
                                 rows={3}
                             />
 
-                            <Input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                                        const reader = new FileReader();
-                                        reader.onload = (e) => setCommunityImage(e.target?.result as string);
-                                        reader.readAsDataURL(file);
-                                    }
-                                }}
-                                className="w-full"
-                            />
+                            {/* Image Upload Section */}
+                            <div className="space-y-3">
+                                <label className="text-sm font-medium text-gray-700">Circle Image</label>
+                                <div className="flex items-center gap-4">
+                                    {/* Image Preview */}
+                                    <div className="w-16 h-16 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden">
+                                        {communityImage ? (
+                                            <img 
+                                                src={communityImage} 
+                                                alt="Preview" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="text-gray-400 text-xs text-center">
+                                                <svg className="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                                No Image
+                                            </div>
+                                        )}
+                                    </div>
+                                    
+                                    {/* Upload Button */}
+                                    <div className="flex-1">
+                                        <label className="cursor-pointer">
+                                            <div className="flex items-center justify-center px-4 py-2 border-2 border-dashed border-orange-300 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition-colors">
+                                                <svg className="w-5 h-5 text-orange-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                                <span className="text-sm font-medium text-orange-600">
+                                                    {communityImage ? 'Change Image' : 'Upload Image'}
+                                                </span>
+                                            </div>
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        // Check file size (5MB = 5 * 1024 * 1024 bytes)
+                                                        const maxSize = 5 * 1024 * 1024;
+                                                        if (file.size > maxSize) {
+                                                            setImageUploadError('File size must be less than 5MB. Please choose a smaller image.');
+                                                            // Clear the file input
+                                                            e.target.value = '';
+                                                            return;
+                                                        }
+                                                        
+                                                        // Clear any previous error
+                                                        setImageUploadError(null);
+                                                        
+                                                        const reader = new FileReader();
+                                                        reader.onload = (e) => {
+                                                            const imageData = e.target?.result as string;
+                                                            setOriginalImage(imageData);
+                                                            setCropPosition({ x: 0, y: 0 });
+                                                            setCropScale(1);
+                                                            setShowImageCropper(true);
+                                                        };
+                                                        reader.readAsDataURL(file);
+                                                    }
+                                                }}
+                                                className="hidden"
+                                            />
+                                        </label>
+                                        
+                                        {/* Remove Image Button */}
+                                        {communityImage && (
+                                            <button
+                                                type="button"
+                                                onClick={() => setCommunityImage('')}
+                                                className="mt-2 text-xs text-red-500 hover:text-red-700 transition-colors"
+                                            >
+                                                Remove Image
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                                {/* Error Message */}
+                                {imageUploadError && (
+                                    <div className="text-red-600 text-sm font-medium bg-red-50 border border-red-200 rounded-lg p-3 flex items-center gap-2">
+                                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        {imageUploadError}
+                                    </div>
+                                )}
+                                <p className="text-xs text-gray-500">
+                                    Upload a square image for best results. Max file size: 5MB
+                                </p>
+                            </div>
                             <Button 
                                 onClick={handleCreateCommunityClick} 
                                 disabled={!communityName.trim() || !communityInstructions.trim() || updateCommunityMutation.isPending}
@@ -806,61 +1073,215 @@ export const CommunityView = () => {
                     </DialogContent>
                 }
                 postDialog={
-                    <DialogContent className="max-w-lg w-full">
-                        <DialogHeader>
-                            <DialogTitle>{editingPostId ? 'Edit Post' : 'Create New Post'}</DialogTitle>
-                            <DialogDescription>{editingPostId ? 'Update your post details' : 'Share something interesting with the community.'}</DialogDescription>
+                    <DialogContent className="max-w-md w-[95vw] max-h-[90vh] overflow-y-auto">
+                        <DialogHeader className="pb-3">
+                            <DialogTitle className="text-lg">{editingPostId ? 'Edit Post' : 'Create Post'}</DialogTitle>
+                            <DialogDescription className="text-sm">{editingPostId ? 'Update your post' : 'Share with the community'}</DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4">
-                            <Select value={selectedCommunity} onValueChange={setSelectedCommunity}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Choose a community" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {communities?.filter((community: any) => joinedCircles.includes(community.id) || community.user_id === userId).map((community: any) => (
-                                        <SelectItem key={community.id} value={community.id}>
-                                            z/{community.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                            {/* Compact Community Selection */}
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-medium text-gray-700">Circle</label>
+                                <Select value={selectedCommunity} onValueChange={setSelectedCommunity}>
+                                    <SelectTrigger className="h-10 border border-gray-200 hover:border-orange-300 focus:border-orange-500 transition-colors">
+                                        <SelectValue placeholder="Select circle">
+                                            {selectedCommunity && (() => {
+                                                const community = communities?.find((c: any) => c.id === selectedCommunity);
+                                                return community ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-6 h-6 rounded-full overflow-hidden border border-orange-200">
+                                                            {community.image ? (
+                                                                <img src={community.image} alt={community.name} className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                                                                    <span className="text-xs font-bold text-orange-600">{community.name.charAt(0)}</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <span className="text-sm font-medium text-gray-900">{community.name}</span>
+                                                    </div>
+                                                ) : null;
+                                            })()}
+                                        </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent className="max-h-48">
+                                        {communities?.filter((community: any) => joinedCircles.includes(community.id) || community.user_id === userId).map((community: any) => (
+                                            <SelectItem key={community.id} value={community.id} className="p-2 cursor-pointer hover:bg-orange-50">
+                                                <div className="flex items-center gap-2 w-full">
+                                                    <div className="w-8 h-8 rounded-full overflow-hidden border border-orange-200 flex-shrink-0">
+                                                        {community.image ? (
+                                                            <img src={community.image} alt={community.name} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+                                                                <span className="text-xs font-bold text-orange-600">{community.name.charAt(0)}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="flex flex-col min-w-0 flex-1">
+                                                        <div className="flex items-center gap-1.5">
+                                                            <span className="text-sm font-medium text-gray-900">{community.name}</span>
+                                                            {community.user_id === userId && (
+                                                                <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5">Owner</Badge>
+                                                            )}
+                                                        </div>
+                                                        <span className="text-xs text-gray-500 truncate">{community.instructions}</span>
+                                                    </div>
+                                                </div>
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {selectedCommunity && !joinedCircles.includes(selectedCommunity) && communities?.find((c: any) => c.id === selectedCommunity)?.user_id !== userId && (
+                                    <div className="flex items-center gap-2 text-orange-600 text-xs font-medium bg-orange-50 border border-orange-200 rounded-md p-2">
+                                        <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                                        </svg>
+                                        You must join this circle to post here.
+                                    </div>
+                                )}
+                            </div>
+
                             <Input
                                 placeholder="Post title"
                                 value={postTitle}
                                 onChange={(e) => setPostTitle(e.target.value)}
-                                className="w-full"
+                                className="w-full h-10 border border-gray-200 hover:border-orange-300 focus:border-orange-500 transition-colors"
                             />
                             <Textarea
                                 placeholder="Post content (optional)"
                                 value={postContent}
                                 onChange={(e) => setPostContent(e.target.value)}
-                                className="w-full"
+                                className="w-full min-h-[80px] border border-gray-200 hover:border-orange-300 focus:border-orange-500 transition-colors resize-none"
+                                rows={3}
                             />
-                            <Input
-                                placeholder="URL (optional)"
-                                value={postUrl}
-                                onChange={(e) => setPostUrl(e.target.value)}
-                                className="w-full"
-                            />
-                            <Input
-                                placeholder="Tags (comma separated, e.g. design, art, tech)"
-                                value={postTags}
-                                onChange={(e) => setPostTags(e.target.value)}
-                                className="w-full"
-                            />
-                            <Input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                                        const reader = new FileReader();
-                                        reader.onload = (e) => setPostImage(e.target?.result as string);
-                                        reader.readAsDataURL(file);
-                                    }
-                                }}
-                                className="w-full"
-                            />
+                            
+                            {/* Compact Two-Column Layout for URL and Tags */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <Input
+                                    placeholder="URL (optional)"
+                                    value={postUrl}
+                                    onChange={(e) => setPostUrl(e.target.value)}
+                                    className="w-full h-10 border border-gray-200 hover:border-orange-300 focus:border-orange-500 transition-colors"
+                                />
+                                <Input
+                                    placeholder="Tags (e.g. design, art)"
+                                    value={postTags}
+                                    onChange={(e) => setPostTags(e.target.value)}
+                                    className="w-full h-10 border border-gray-200 hover:border-orange-300 focus:border-orange-500 transition-colors"
+                                />
+                            </div>
+                            
+                            {/* Enhanced Image Upload Section */}
+                            <div className="space-y-3">
+                                <label className="text-xs font-medium text-gray-700 flex items-center gap-1.5">
+                                    <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Add Image
+                                </label>
+                                
+                                {postImage ? (
+                                    /* Image Preview with Controls */
+                                    <div className="space-y-3">
+                                        <div className="w-full h-32 rounded-lg border-2 border-orange-200 overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 shadow-sm relative">
+                                            <img 
+                                                src={postImage} 
+                                                alt="Post preview" 
+                                                className="w-full h-full object-cover"
+                                            />
+                                            {/* File Size Info */}
+                                            <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+                                                Max 8MB
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Always Visible Controls */}
+                                        <div className="flex items-center justify-center gap-3">
+                                            <label className="cursor-pointer">
+                                                <div className="bg-orange-100 hover:bg-orange-200 text-orange-700 hover:text-orange-800 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md border border-orange-200">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                                    </svg>
+                                                    Replace Image
+                                                </div>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={(e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (file) {
+                                                            // Check file size (8MB limit)
+                                                            const maxSize = 8 * 1024 * 1024;
+                                                            if (file.size > maxSize) {
+                                                                alert('File size must be less than 8MB. Please choose a smaller image.');
+                                                                e.target.value = '';
+                                                                return;
+                                                            }
+                                                            
+                                                            const reader = new FileReader();
+                                                            reader.onload = (e) => setPostImage(e.target?.result as string);
+                                                            reader.readAsDataURL(file);
+                                                        }
+                                                    }}
+                                                    className="hidden"
+                                                />
+                                            </label>
+                                            
+                                            <button
+                                                type="button"
+                                                onClick={() => setPostImage('')}
+                                                className="bg-red-100 hover:bg-red-200 text-red-700 hover:text-red-800 px-4 py-2 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow-md border border-red-200"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                                Remove Image
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    /* Upload Area */
+                                    <label className="cursor-pointer block">
+                                        <div className="w-full h-32 border-2 border-dashed border-orange-300 rounded-lg hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 flex flex-col items-center justify-center gap-2 group bg-gradient-to-br from-orange-25 to-orange-50">
+                                            <div className="w-12 h-12 rounded-full bg-orange-100 group-hover:bg-orange-200 transition-colors duration-200 flex items-center justify-center">
+                                                <svg className="w-6 h-6 text-orange-500 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                            </div>
+                                            <div className="text-center">
+                                                <p className="text-sm font-medium text-orange-600 group-hover:text-orange-700 transition-colors">
+                                                    Click to upload image
+                                                </p>
+                                                <p className="text-xs text-gray-500 mt-1">
+                                                    JPG, PNG, GIF up to 8MB
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    // Check file size (8MB limit)
+                                                    const maxSize = 8 * 1024 * 1024;
+                                                    if (file.size > maxSize) {
+                                                        alert('File size must be less than 8MB. Please choose a smaller image.');
+                                                        e.target.value = '';
+                                                        return;
+                                                    }
+                                                    
+                                                    const reader = new FileReader();
+                                                    reader.onload = (e) => setPostImage(e.target?.result as string);
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                            className="hidden"
+                                        />
+                                    </label>
+                                )}
+                            </div>
+
                             <Button
                                 onClick={handleCreatePost}
                                 disabled={
@@ -870,20 +1291,33 @@ export const CommunityView = () => {
                                     createPostMutation.isPending ||
                                     updatePostMutation.isPending
                                 }
-                                className={editingPostId ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'}
+                                className={`w-full h-10 font-semibold text-white transition-all duration-200 ${
+                                    editingPostId 
+                                        ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-md' 
+                                        : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 hover:shadow-md hover:scale-[1.01]'
+                                }`}
                             >
                                 {(createPostMutation.isPending || updatePostMutation.isPending) ? (
                                     <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                        <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                         {editingPostId ? 'Saving...' : 'Posting...'}
                                     </div>
                                 ) : (
-                                    editingPostId ? 'Save Changes' : 'Create Post'
+                                    <>
+                                        {editingPostId ? (
+                                            <>
+                                                <Edit className="w-4 h-4 mr-1.5" />
+                                                Save Changes
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Plus className="w-4 h-4 mr-1.5" />
+                                                Create Post
+                                            </>
+                                        )}
+                                    </>
                                 )}
                             </Button>
-                            {selectedCommunity && !joinedCircles.includes(selectedCommunity) && communities?.find((c: any) => c.id === selectedCommunity)?.user_id !== userId && (
-                                <div className="text-orange-600 text-sm font-semibold mt-2">You must join this circle to post.</div>
-                            )}
                         </div>
                     </DialogContent>
                 }
@@ -939,22 +1373,13 @@ export const CommunityView = () => {
                         </div>
 
                         {/* Community Circles */}
-                        {communities?.filter((community: any) =>
-                            community.name.toLowerCase().includes(searchQuery.toLowerCase())
-                        ).map((community: any) => (
+                        {filteredCommunities.map((community: any) => (
                             <div
                                 key={community.id}
                                 className={`flex flex-col items-center cursor-pointer transition-all hover:scale-105 ${selectedCommunity === community.id ? '' : 'opacity-70 hover:opacity-100'
                                     }`}
-                                onClick={() => setSelectedCommunity(community.id)}
-                                onMouseEnter={() => {
-                                    // Prefetch posts for this community on hover
-                                    queryClient.prefetchQuery({
-                                        queryKey: ['community', 'getPosts', { communityId: community.id, sortBy }],
-                                        queryFn: () => postService.getByCommunitySorted(community.id, sortBy),
-                                        staleTime: 1000 * 60 * 1, // Cache for 1 minute
-                                    });
-                                }}
+                                onClick={() => handleCommunitySelect(community.id)}
+                                onMouseEnter={() => handlePrefetchCommunity(community.id)}
                             >
                                 <div className={`w-16 h-16 rounded-full mb-2 ${selectedCommunity === community.id
                                         ? 'bg-gradient-to-br from-orange-500 to-orange-600 p-[2px]'
@@ -2192,6 +2617,179 @@ export const CommunityView = () => {
                     </div>
                 );
             })()}
+
+            {/* Instagram-style Image Cropper Modal */}
+            {showImageCropper && originalImage && (
+                <div 
+                    className="fixed inset-0 bg-black/90 flex items-center justify-center z-[99999] p-4"
+                    style={{ pointerEvents: 'auto' }}
+                    onClick={(e) => {
+                        // Only close if clicking the backdrop, not the modal content
+                        if (e.target === e.currentTarget) {
+                            setShowImageCropper(false);
+                            setOriginalImage(null);
+                            setImageLoaded(false);
+                        }
+                    }}
+                >
+                    <div 
+                        className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
+                        style={{ pointerEvents: 'auto' }}
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setShowImageCropper(false);
+                                    setOriginalImage(null);
+                                    setImageLoaded(false);
+                                }}
+                                className="text-gray-600 hover:text-gray-800 font-medium transition-colors cursor-pointer"
+                                disabled={isProcessing}
+                                style={{ pointerEvents: 'auto' }}
+                            >
+                                Cancel
+                            </button>
+                            <h3 className="font-semibold text-lg">Edit Photo</h3>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleCropImage();
+                                }}
+                                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                disabled={!imageLoaded || isProcessing}
+                                style={{ pointerEvents: 'auto' }}
+                            >
+                                {isProcessing ? (
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                                        Processing...
+                                    </div>
+                                ) : (
+                                    'Done'
+                                )}
+                            </button>
+                        </div>
+
+                        {/* Crop Area */}
+                        <div className="relative bg-black" style={{ pointerEvents: 'auto' }}>
+                            <div className="w-full h-80 relative overflow-hidden">
+                                {/* Loading State */}
+                                {!imageLoaded && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-gray-900 z-10">
+                                        <div className="flex flex-col items-center gap-3">
+                                            <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                            <p className="text-white text-sm">Loading image...</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Image */}
+                                <div
+                                    className={`absolute inset-0 cursor-move transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                    style={{
+                                        transform: `translate(${cropPosition.x}px, ${cropPosition.y}px) scale(${cropScale})`,
+                                        transformOrigin: 'center',
+                                        pointerEvents: imageLoaded ? 'auto' : 'none'
+                                    }}
+                                    onMouseDown={(e) => {
+                                        if (imageLoaded && !isProcessing) {
+                                            e.preventDefault();
+                                            handleCropMouseDown(e);
+                                        }
+                                    }}
+                                    onMouseMove={(e) => {
+                                        if (imageLoaded && !isProcessing) {
+                                            handleCropMouseMove(e);
+                                        }
+                                    }}
+                                    onMouseUp={(e) => {
+                                        if (imageLoaded && !isProcessing) {
+                                            handleCropMouseUp();
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (imageLoaded && !isProcessing) {
+                                            handleCropMouseUp();
+                                        }
+                                    }}
+                                >
+                                    <img
+                                        src={originalImage}
+                                        alt="Crop preview"
+                                        className="w-full h-full object-contain pointer-events-none select-none"
+                                        draggable={false}
+                                        onLoad={() => {
+                                            console.log('Image loaded successfully');
+                                            setImageLoaded(true);
+                                        }}
+                                        onError={() => {
+                                            console.error('Failed to load image for cropping');
+                                            setImageLoaded(false);
+                                        }}
+                                    />
+                                </div>
+
+                                {/* Circular Crop Overlay */}
+                                <div className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                                    {/* Dark overlay with circular cutout */}
+                                    <div 
+                                        className="absolute inset-0"
+                                        style={{
+                                            background: `radial-gradient(circle at center, transparent 120px, rgba(0,0,0,0.7) 120px)`
+                                        }}
+                                    />
+                                    
+                                    {/* Circle border */}
+                                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 border-2 border-white rounded-full pointer-events-none" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Controls */}
+                        <div className="p-4 space-y-4" style={{ pointerEvents: 'auto' }}>
+                            {/* Zoom Slider */}
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700">Zoom</label>
+                                <input
+                                    type="range"
+                                    min="0.5"
+                                    max="3"
+                                    step="0.1"
+                                    value={cropScale}
+                                    onChange={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setCropScale(parseFloat(e.target.value));
+                                    }}
+                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider transition-opacity"
+                                    disabled={!imageLoaded || isProcessing}
+                                    style={{
+                                        background: `linear-gradient(to right, #f97316 0%, #f97316 ${((cropScale - 0.5) / 2.5) * 100}%, #e5e7eb ${((cropScale - 0.5) / 2.5) * 100}%, #e5e7eb 100%)`,
+                                        opacity: imageLoaded && !isProcessing ? 1 : 0.5,
+                                        pointerEvents: imageLoaded && !isProcessing ? 'auto' : 'none'
+                                    }}
+                                />
+                            </div>
+
+                            {/* Instructions */}
+                            <div className="text-center">
+                                <p className="text-sm text-gray-600">
+                                    {!imageLoaded ? 'Loading image...' : 
+                                     isProcessing ? 'Processing image...' : 
+                                     'Drag to reposition • Use slider to zoom'}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

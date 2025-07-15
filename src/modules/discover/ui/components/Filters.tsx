@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Search, Filter, AlertCircle } from 'lucide-react'
 
 // Filters.tsx is a Creators directory page with Search and Filter Panel with a Dropdown Location, Discipline, & Style Tags filters that render Creators
@@ -1050,6 +1051,7 @@ const masonryStyles = `
 
 
 function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [selectedDisciplines, setSelectedDisciplines] = useState<string[]>([]);
@@ -1656,7 +1658,10 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
           defaultState="Creators"
           className="mx-5"
         />
-                <button className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-full hover:from-yellow-600 hover:to-amber-700 transition-all duration-500 flex items-center shadow-lg hover:shadow-xl relative group border-2 border-transparent hover:border-orange-200 hero-button-size">
+                <button 
+                  className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-full hover:from-yellow-600 hover:to-amber-700 transition-all duration-500 flex items-center shadow-lg hover:shadow-xl relative group border-2 border-transparent hover:border-orange-200 hero-button-size"
+                  onClick={() => router.push('/become-a-creator')}
+                >
                   <div className="absolute inset-0 rounded-full bg-orange-400 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500"></div>
                   <div className="absolute inset-0 rounded-full bg-orange-400 opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500"></div>
                   <div className="absolute -inset-[2px] rounded-full bg-gradient-to-r from-orange-400 to-amber-500 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
