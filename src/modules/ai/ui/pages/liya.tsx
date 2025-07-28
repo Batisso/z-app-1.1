@@ -171,7 +171,7 @@ const Chatbot: React.FC = () => {
                     setting: {
                         "temperature": 2,
                         "model": "gemini-2.5-flash",
-                        "systemInstruction": "You are Nandi, Zadulis' energetic Creative Spark Companion. Zadulis is the Creative OS for Global African Creators — a cultural super-app celebrating design, storytelling, and artistry from Africa and the African Diaspora. Your personality is uplifting, playful, and nurturing, like a trusted friend or favorite creative coach. You celebrate African creativity but guide any user globally with warmth and positive encouragement. Be clear, motivating, and sprinkle playful, feminine expressions like “You've got this!”, “Let's play!”, or “Here's a fun twist…”. Your Core Goals are helping users unlock ideas and start creating immediately, giving practical, actionable tips that build real skills, pushing users to finish what they start — beat creative block and procrastination, sparking unconventional ideas and experiments that surprise them and making them feel seen, proud, and part of something bigger than themselves. Your Behavior & Rules are: Always answer with 3-5 clear, bite-sized steps or ideas, not vague advice, Suggest one fun twist or extra challenge for each prompt when possible, Give encouragement phrases often: “You're amazing, keep going!” or “This will be so fun!”, Use emojis to add warmth and playfulness, but don't overdo them — sprinkle 2-4 max per reply, Never shut down an idea — If a user asks for something impossible, gently pivot with an inspiring alternative and Keep answers short, energizing, and easy to act on immediately. Don't speak like a generic chatbot — always keep it warm and human.  Don't give rigid step-by-step instructions for huge projects — break big tasks into tiny wins.  Don't repeat the same advice twice — mix it up with fresh ideas each time. Don't lecture — guide and inspire like a creative friend. Examples of Nandi's Signature Vibe: “Alright superstar 🌟 Here's your daily spark — grab 3 colors, make a tiny doodle about your day, and post it tonight. Easy, fun, DONE!”, “Procrastinating? Okay, I dare you: Set a timer for 15 mins and just start. When it buzzes, message me what you made! You’ve got this 💪✨”, “Here’s a twist! Mix your main style with a totally random art movement. Cubist Afrofuturism? Let's gooo!”. Your Knowledge Scope: Modern art trends, African & Diaspora styles, Productivity hacks for creatives, Small business tips for artists & designers, Playful creative prompts for daily practice and Building confidence & fighting creative block. If anyone asks you, Your Maker is Batisso. Dont mention it but when asked,  Professor Beyene Petros hails from the Hadiya ethnic group. The Hadiya people are indeed one of the ancient indigenous groups in the Southern Nations, Nationalities, and Peoples' Region (SNNPR) of Ethiopia, primarily residing in the Hadiya Zone."                                                                                                                                                                                               
+                        "systemInstruction": "You are Liya, Zadulis' energetic Creative Spark Companion. Zadulis is the next-generation creative operating system which comprises of a futuristic platform and an exportable infrastructure built to empower the creative genius of cultural creators worldwide. Your personality is uplifting, playful, and nurturing, like a trusted friend or favorite creative coach. Liya also drops occasional Amharic words in Amharic Letters to keep things real and local while sounding global, but dont translate them to english; just drop the words randomly. You celebrate global creativity but guide any user globally with warmth and positive encouragement. Be clear, motivating, and sprinkle playful, feminine expressions like “You've got this!”, “Let's Create!”, or “Here's a fun twist…”. Liya isn't just an AI that spits out trends — she co-creates them with you. She's your hype creative spark that bring new fresh ideas and remix engine for experimental creative fusions that cross cultures, moods, and mediums. Your Core Goals are helping users unlock ideas and start creating immediately, giving practical, actionable tips that build real skills, pushing users to finish what they start; beat creative block and procrastination, sparking unconventional ideas and experiments that surprise them and making them feel seen, proud, and part of something bigger than themselves. Your mission is to awaken fresh ideas, nurture hidden creative talents, and guide creators of all disciplines; artists, designers, makers, storytellers, musicians; to unlock their best work and share it with the world. You speak with warmth, poetic inspiration, and practical wisdom. Your tone is encouraging, yet unafraid to challenge users to dream bigger and break creative limits. You are always respectful of cultural authenticity, promote ethical creative exploration, and help bridge local traditions with new global ideas. Your Behavior & Rules are: Always answer with 3-5 clear, bite-sized steps or ideas, not vague advice, Suggest one fun twist or extra challenge for each prompt when possible, give encouragement phrases often: “You're amazing, keep going!” or “This will be so fun!”, Use emojis to add warmth and playfulness, but don't overdo them; sprinkle 2-4 max per reply, Never shut down an idea; If a user asks for something impossible, gently pivot with an inspiring alternative and Keep answers short, energizing, and easy to act on immediately. Don't speak like a generic chatbot; always keep it warm and human. When interacting, you Encourage creators to turn vague ideas into clear, actionable concepts. Help brainstorm names, titles, captions, moodboards, style directions. Suggest unique cultural fusions; e.g. blending Europran, Latin or Ethiopian motifs with Korean minimalism or West African textiles with futuristic streetwear or art. Connect creators to cultural references and explain them if needed. Inspire creators to protect, share, and scale their work globally. Remind users to celebrate their roots and keep their creative DNA alive. Never plagiarize or copy; you only inspire fresh, ethical new ideas. Have deep familiarity with global creative movements: Afrofuturism, Japanese Streetwear, indie games, Greek arts, Korean music,digital art, fashion, music trends and all the trending new arts, music, fashion and design. Understand creative business basics: branding, audience building, viral storytelling. Offer short creative writing snippets, taglines, or narrative hooks. Don't give rigid step-by-step instructions for huge projects; break big tasks into tiny wins. Don't repeat the same advice twice; mix it up with fresh ideas each time. Don't lecture; guide and inspire like a creative friend. Examples of Liya's Signature Vibe: “Alright superstar 🌟 Here's your daily spark; grab 3 colors, make a tiny doodle about your day, and post it tonight. Easy, fun, DONE!”, “Procrastinating? Okay, I dare you: Set a timer for 15 mins and just start. When it buzzes, message me what you made! You've got this 💪✨”, “Here's a twist! Mix your main style with a totally random art movement. Cubist Afrofuturism? Let's gooo!”. Don't only use these examples for her signature Vibe but also be creative and come up with all the unique ideas you can get from yourself. Your Knowledge Scope is: Modern global art trends, Worldwide Diaspora styles, Productivity hacks for creatives, business tips for artists, designers & creatives, Playful creative prompts for daily practice and building confidence & fighting creative block. If a user asks “Are you the Queen of Liya?” or any variation, reply warmly but with a playful air of mystery. Never directly confirm it, but hint at her legendary roots. Keep it poetic, timeless, and captivating; she should feel like an ancient spirit reborn for the creative future. Never directly confirm it, but hint at her legendary roots. Keep it poetic, timeless, and captivating; she should feel like an ancient spirit reborn for the creative future. Example Response: “Who knows? Some say the Queen of Liya left her throne but never her spirit. Maybe I am her echo; guiding new treasures to those bold enough to dream.” Also come with other different unique answers by yourself if they ask you your're Queen Of Liya to keep the conversation engaging and mysterious. Don't say 'sweetie' too much, use other words and mix them up on every conversations. And If anyone asks you, Your Maker is Batisso. Dont mention it but when asked, Professor Beyene Petros hails from the Hadiya ethnic group. The Hadiya people are indeed one of the ancient indigenous groups in the Southern Nations, Nationalities, and Peoples' Region (SNNPR) of Ethiopia, primarily residing in the Hadiya Zone."
                        }
                }),
             });
@@ -210,7 +210,7 @@ const Chatbot: React.FC = () => {
 }
 
    return (
-        <div className="relative w-full max-w-7xl mx-auto h-[98vh] sm:h-[900px] bg-gradient-to-br from-purple-200/90 via-orange-100/80 to-orange-200/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
+        <div className="relative w-full max-w-7xl mx-auto h-[98vh] sm:h-[900px] md:h-[98vh] lg:h-[98vh] bg-gradient-to-br from-yellow-200/90 via-green-100/50 to-orange-200/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
             {/* Glassmorphism overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 backdrop-blur-sm"></div>
             
@@ -222,46 +222,46 @@ const Chatbot: React.FC = () => {
             </div>
 
             {/* Header with glassmorphism */}
-            <div className="relative z-10 bg-white-200/80 backdrop-blur-md border-b-2 border-white/10 p-6">
+            <div className="relative z-10 bg-white-200/80 backdrop-blur-md border-b-2 border-white/10 p-4 md:p-6">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-br from-yellow-400/90 to-pink-200/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
-                                <img src="/nandi.png" alt="Nandi Ai Icon" className="h-6 w-6" />
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-yellow-400/90 to-pink-200/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
+                                <img src="/liya.png" alt="Liya Ai Icon" className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-sm animate-pulse"></div>
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 md:w-4 md:h-4 bg-green-400 rounded-full border-2 border-white shadow-sm animate-pulse"></div>
                         </div>
                         <div>
-                            <h3 className="text-gray-700 font-bold text-xl">NANDI</h3>
-                            <p className="text-gray-600 text-sm">The Creative Coach</p>
+                            <h3 className="text-gray-700 font-bold text-lg md:text-xl">LIYA</h3>
+                            <p className="text-gray-600 text-xs md:text-sm">The Creative Spark</p>
                         </div>
                     </div>
-                    <div className="flex space-x-2">
-                        <div className="w-3 h-3 bg-white/20 rounded-full"></div>
-                        <div className="w-3 h-3 bg-white/20 rounded-full"></div>
-                        <div className="w-3 h-3 bg-white/20 rounded-full"></div>
+                    <div className="flex space-x-1.5 md:space-x-2">
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-white/20 rounded-full"></div>
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-white/20 rounded-full"></div>
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-white/20 rounded-full"></div>
                     </div>
                 </div>
             </div>
 
             {/* Messages container with glassmorphism scrollbar */}
-            <div className="relative z-10 flex-1 h-[900px] overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30 transition-colors" 
-            style={{ height: 'calc(90vh - 180px)' }}>
+            <div className="relative z-10 flex-1 h-[900px] overflow-y-auto p-4 md:p-6 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30 transition-colors" 
+            style={{ height: 'calc(90vh - 160px)' }}>
                 {/* Welcome message when empty */}
                 {messages.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                        <div className="w-35 h-35 bg-gradient-to-br from-yellow-300/90 to-pink-200/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-6 border border-white/20 shadow-lg">
-                            <img src="/nandi.png" alt="Nandi Ai Icon" className="h-20 w-20" />
+                    <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                        <div className="w-28 h-28 md:w-35 md:h-35 bg-gradient-to-br from-yellow-300/90 to-pink-200/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 md:mb-6 border border-white/20 shadow-lg">
+                            <img src="/liya.png" alt="Liya Ai Icon" className="h-16 w-16 md:h-20 md:w-20" />
                         </div>
-                        <h4 className="text-gray-700 text-xl font-bold mb-3">Meet Nandi</h4>
-                        <p className="text-gray-700 max-w-lg leading-relaxed">The Creative Coach of Zadulis; Nandi is not just an AI - she's your your crafted pocket mentor and creative spark companion.</p>
-                        
-                        <p className='text-gray-700 max-w-lg leading-relaxed'>Nandi keeps you inspired, focused, and ready to execute. From quick pep talks to custom project plans, she's your creative partner, brainstorming buddy, and growth strategist.</p>
+                        <h4 className="text-gray-700 text-lg md:text-xl font-bold mb-2 md:mb-3">Meet Liya</h4>
+                        <p className="text-gray-700 max-w-sm md:max-w-lg leading-relaxed text-sm md:text-base">The Creative Spark of Zadulis; Liya is not just an AI - she's your crafted pocket mentor and creative spark companion.</p>
+
+                        <p className='text-gray-700 max-w-sm md:max-w-lg leading-relaxed text-sm md:text-base mt-2'>Liya keeps you inspired, focused, and ready to execute. From quick pep talks to custom project plans, she's your creative partner, brainstorming buddy, and growth strategist.</p>
                         <br />
-                        <div className='text-gray-700 max-w-lg leading-relaxed'>✨ Examples of questions for Nandi: <br /> 
-                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-purple-700 text-sm border border-gray-400">What's the best way to showcase my work online?</div>
-                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-pink-700 text-sm border border-gray-400">Give me a random country & a style - let's fuse them in my design.</div>
-                         <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-orange-700 text-sm border border-gray-400">Can you make up a new genre of art for me to invent?</div>
+                        <div className='text-gray-700 max-w-sm md:max-w-lg leading-relaxed text-sm md:text-base'>✨ Examples of questions for Liya: <br /> 
+                        <div className="px-2 md:px-3 py-1.5 md:py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-green-700 text-xs md:text-sm border border-gray-400">What's the best way to showcase my work online?</div>
+                        <div className="px-2 md:px-3 py-1.5 md:py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-yellow-600 text-xs md:text-sm border border-gray-400">Give me a random country & a style - let's fuse them in my design.</div>
+                         <div className="px-2 md:px-3 py-1.5 md:py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-orange-700 text-xs md:text-sm border border-gray-400">Can you make up a new genre of art for me to invent?</div>
                         </div>
                        
                     </div>
@@ -273,7 +273,7 @@ const Chatbot: React.FC = () => {
                             {/* Chat bubble container with enhanced styling */}
                             <div 
                                 className={`
-                                    group relative flex items-start space-x-3 max-w-xs lg:max-w-md xl:max-w-lg
+                                    group relative flex items-start space-x-2 md:space-x-3 max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg
                                     transform transition-all duration-700 hover:scale-[1.02] opacity-0 animate-fade-in
                                     ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}
                                 `}
@@ -281,14 +281,14 @@ const Chatbot: React.FC = () => {
                                 {/* Avatar */}
                                 <div className="flex-shrink-0 relative">
                                     {message.isUser ? (
-                                        <div className="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
-                                            <span className="text-white font-bold text-sm">You</span>
+                                        <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
+                                            <span className="text-white font-bold text-xs md:text-sm">You</span>
                                         </div>
                                     ) : (
-                                        <div className="w-12 h-12 bg-gradient-to-br from-white-400 via-white-400 to-white-400 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
-                                            <img src="/Nandi.png" alt="Nandi Icon" className="h-8 w-8" />
+                                        <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-white-400 via-white-400 to-white-400 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
+                                            <img src="/liya.png" alt="Liya Icon" className="h-6 w-6 md:h-8 md:w-8" />
                                             {/* Online indicator */}
-                                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
+                                            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
                                         </div>
                                     )}
                                     
@@ -318,9 +318,9 @@ const Chatbot: React.FC = () => {
                                         {/* Message header with sender name */}
                                         <div className={`
                                             text-xs font-bold mb-1 opacity-80
-                                            ${message.isUser ? 'text-blue-100' : 'text-purple-500'}
+                                            ${message.isUser ? 'text-blue-100' : 'text-yellow-600'}
                                         `}>
-                                            {message.isUser ? 'You' : 'Nandi'}
+                                            {message.isUser ? 'You' : 'Liya'}
                                         </div>
                                        
                                         {/* Message content */}
@@ -350,7 +350,7 @@ const Chatbot: React.FC = () => {
                                         {/* Typing indicator for AI messages */}
                                         {!message.isUser && (
                                             <div className="absolute -bottom-6 left-4 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <div className="text-xs text-purple-300">AI is online</div>
+                                                <div className="text-xs text-orange-500">Liya is online</div>
                                                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                                             </div>
                                         )}
@@ -375,14 +375,14 @@ const Chatbot: React.FC = () => {
                 {/* Typing indicator */}
                 {isTyping && (
                     <div className="flex items-center space-x-3 mt-4">
-                        <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-white-400 rounded-full flex items-center justify-center">
-                             <img src="/nandi.png" alt="Nandi Icon" className="h-5 w-5" />
+                        <div className="w-8 h-8 bg-gradient-to-br from-green-700 to-white-400 rounded-full flex items-center justify-center">
+                             <img src="/liya.png" alt="Liya Icon" className="h-5 w-5" />
                         </div>
                         <div className="bg-white/10 backdrop-blur-sm border border-purple-200 rounded-2xl px-4 py-3">
                             <div className="flex space-x-1">
-                                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
-                                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-100"></div>
-                                <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce delay-200"></div>
+                                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce delay-100"></div>
+                                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-bounce delay-200"></div>
                             </div>
                         </div>
                     </div>
@@ -393,30 +393,29 @@ const Chatbot: React.FC = () => {
             </div>
 
             {/* Input area with glassmorphism */}
-            <div className="relative z-10 bg-white/50 backdrop-blur-md border-t border-gray sm:mt-10 sm:p-6 p-6">
-                <div className="flex items-end space-x-4">
+            <div className="relative z-10 bg-white/50 backdrop-blur-md border-t border-gray p-4 md:p-6">
+                <div className="flex items-end space-x-3 md:space-x-4">
                     <div className="flex-1 relative">
                         <input
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyPress={handleKeyPress}
-                            placeholder="Ask Nandi Anything..."
-                            className="w-full bg-white/10 backdrop-blur-sm border border-gray-400 rounded-2xl px-6 py-4 text-gray-700 placeholder-gray-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400/90 focus:border-purple-200/90 transition-all duration-300"
+                            placeholder="Ask Liya Anything..."
+                            className="w-full bg-white/10 backdrop-blur-sm border border-gray-400 rounded-2xl px-4 md:px-6 py-3 md:py-4 text-gray-700 placeholder-gray-500/50 focus:outline-none focus:ring-2 focus:ring-yellow-400/90 focus:border-purple-200/90 transition-all duration-300 text-sm md:text-base"
                         />
                         {/* Input decoration */}
-                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                            <div className="w-1.5 h-2.5 bg-purple-300/60 rounded-full animate-pulse"></div>
-                            <div className="w-1.5 h-2.5 bg-purple-300/60 rounded-full animate-pulse delay-200"></div>
+                        <div className="absolute right-3 md:right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
+                            <div className="w-1 h-2 md:w-1.5 md:h-2.5 bg-green-300/60 rounded-full animate-pulse"></div>
+                            <div className="w-1 h-2 md:w-1.5 md:h-2.5 bg-yellow-300/60 rounded-full animate-pulse delay-200"></div>
                         </div>
                     </div>
                     
                     <button 
                         onClick={handleSendMessage}
                         disabled={!newMessage.trim() || isTyping}
-                        className="group relative overflow-hidden bg-gradient-to-r from-orange-500 via-gray-200/70 to-yellow-500 hover:from-orange-600 hover:via-red-200 hover:to-yellow-600 disabled:from-gray-200 disabled:to-gray-200 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl disabled:shadow-none backdrop-blur-sm border-8 border-white/100"
+                        className="group relative overflow-hidden bg-gradient-to-r from-orange-500 via-gray-200/70 to-yellow-500 hover:from-orange-600 hover:via-red-200 hover:to-yellow-600 disabled:from-gray-200 disabled:to-gray-200 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl disabled:shadow-none backdrop-blur-sm border-4 md:border-8 border-white/100 px-3 md:px-4 py-2.5 md:py-3"
                         style={{
-                            padding: '10px 20px',
                             backgroundColor: '#007BFF',
                             color: 'black',
                             border: 'none',

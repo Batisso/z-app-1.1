@@ -1,4 +1,4 @@
-import  ShabaView from "@/modules/ai/ui/pages/shaba";
+import  SatoshiView from "@/modules/ai/ui/pages/satoshi";
 
 import { getQueryClient, trpc } from "@/trpc/server";
 
@@ -15,7 +15,7 @@ const shopPage = async () => {
   
   <HydrationBoundary state={dehydrate(queryClient)}>
   <Suspense>
-  <ShabaView/>
+  <SatoshiView/>
   </Suspense>
   </HydrationBoundary>
 

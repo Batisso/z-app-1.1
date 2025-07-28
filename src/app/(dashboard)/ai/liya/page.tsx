@@ -1,4 +1,4 @@
-import  KwameView from "@/modules/ai/ui/pages/kwame";
+import  LiyaView from "@/modules/ai/ui/pages/liya";
 
 import { getQueryClient, trpc } from "@/trpc/server";
 
@@ -15,7 +15,7 @@ const shopPage = async () => {
   
   <HydrationBoundary state={dehydrate(queryClient)}>
   <Suspense>
-  <KwameView/>
+  <LiyaView/>
   </Suspense>
   </HydrationBoundary>
 

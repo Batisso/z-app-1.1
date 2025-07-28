@@ -167,95 +167,517 @@ const ShimmerGrid: React.FC = () => {
   );
 };
 
-// FAQ Data with categories
+// Rich Text Content Types
+type RichTextContent = 
+  | { type: 'paragraph'; text: string }
+  | { type: 'section'; title: string; text?: string; emoji?: string }
+  | { type: 'list'; items: string[] }
+  | { type: 'highlight'; text: string }
+  | { type: 'quote'; text: string };
+
+interface RichAnswer {
+  type: 'rich';
+  content: RichTextContent[];
+}
+
+// Rich Text Renderer Component
+const RichTextRenderer: React.FC<{ content: RichTextContent[] }> = ({ content }) => {
+  const renderText = (text: string) => {
+    // Handle bold text with **text**
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={index} className="font-semibold text-gray-800">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {content.map((item, index) => {
+        switch (item.type) {
+          case 'paragraph':
+            return (
+              <p key={index} className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed">
+                {renderText(item.text)}
+              </p>
+            );
+          
+          case 'section':
+            return (
+              <div key={index} className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl p-4 border-l-4 border-orange-400">
+                <h4 className="font-semibold text-gray-800 text-base sm:text-lg mb-2 flex items-center gap-2">
+                  {item.emoji && <span className="text-xl">{item.emoji}</span>}
+                  {item.title}
+                </h4>
+                {item.text && (
+                  <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
+                    {renderText(item.text)}
+                  </p>
+                )}
+              </div>
+            );
+          
+          case 'list':
+            return (
+              <ul key={index} className="space-y-2 ml-4">
+                {item.items.map((listItem, listIndex) => (
+                  <li key={listIndex} className="flex items-start gap-3 text-gray-600 text-sm sm:text-base leading-relaxed">
+                    <span className="w-2 h-2 bg-gradient-to-r from-orange-400 to-yellow-400 rounded-full mt-2 flex-shrink-0"></span>
+                    {renderText(listItem)}
+                  </li>
+                ))}
+              </ul>
+            );
+          
+          case 'highlight':
+            return (
+              <div key={index} className="bg-gradient-to-r from-red-50 via-orange-50 to-yellow-50 rounded-xl p-4 border border-orange-200">
+                <p className="text-gray-700 text-sm sm:text-base font-medium leading-relaxed">
+                  {renderText(item.text)}
+                </p>
+              </div>
+            );
+          
+          case 'quote':
+            return (
+              <blockquote key={index} className="border-l-4 border-orange-400 pl-4 italic text-gray-600 text-sm sm:text-base leading-relaxed">
+                {renderText(item.text)}
+              </blockquote>
+            );
+          
+          default:
+            return null;
+        }
+      })}
+    </div>
+  );
+};
+
+// FAQ Data with rich text content
 const faqData = [
+  // GENERAL
   {
     id: 1,
     category: "General",
-    question: "What is this platform about?",
-    answer: "This platform allows creators to share their knowledge, grow their audience, and earn rewards by publishing content. We provide a comprehensive ecosystem for content creators to monetize their expertise and connect with their audience."
+    question: "What is Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Zadulis is the **Creative Operating System for the Orange Economy** — a next-generation super-app and exportable toolkit designed to **showcase, protect, and scale** authentic global cultural creativity."
+        }
+      ]
+    }
   },
   {
     id: 2,
     category: "General",
-    question: "Who can use this platform?",
-    answer: "Anyone with valuable knowledge, skills, or expertise can use our platform. Whether you're an educator, artist, entrepreneur, or professional in any field, you can share your content and build your audience here."
+    question: "Who can use Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Zadulis is for **cultural creators** (artists, designers, musicians, filmmakers), **diaspora communities**, **collectors & fans**, and **brands, agencies, and institutions** seeking verified cultural creativity."
+        }
+      ]
+    }
   },
   {
     id: 3,
-    category: "Services",
-    question: "What services do you offer?",
-    answer: "We offer content hosting, audience analytics, monetization tools, marketing support, community building features, and comprehensive creator resources to help you succeed."
+    category: "General",
+    question: "Where is Zadulis based?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Zadulis is globally positioned — with a focus on creators and communities across **Africa, Asia, Latin America, and the Diaspora**. Our team works remotely with hubs in NYC, London, and Accra."
+        }
+      ]
+    }
   },
   {
     id: 4,
-    category: "Services",
-    question: "Do you provide marketing support?",
-    answer: "Yes! We provide marketing tools, SEO optimization, social media integration, and promotional opportunities to help increase your content's visibility and reach."
+    category: "General",
+    question: "Why is Zadulis different from other creative platforms?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Most platforms extract value from creators — we help creators **own, protect, and grow** their cultural genius. We're not just a marketplace or social feed — we're a full **operating system** for cultural creativity."
+        }
+      ]
+    }
   },
   {
     id: 5,
-    category: "Process",
-    question: "How do I become a creator?",
-    answer: "Simply visit the Become a Creator page, fill out the application form with your details, upload your portfolio, and our team will review your application within 2-3 business days."
+    category: "General",
+    question: "How much does Zadulis cost to join?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Joining is **free for creators** — we earn through fair commission on sales and premium services. Brands and institutions pay for API, SaaS tools, and premium listings."
+        }
+      ]
+    }
   },
+
+  // FOR CREATORS
   {
     id: 6,
-    category: "Process",
-    question: "Is there a fee to join as a creator?",
-    answer: "No, joining as a creator is completely free! We believe in supporting creators and only take a small commission from your earnings to maintain and improve the platform."
+    category: "For Creators",
+    question: "How do I get started as a creator?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Sign up for our early access waitlist at [your domain]. You'll get priority onboarding, early creator perks, and tools to protect and promote your work globally."
+        }
+      ]
+    }
   },
   {
     id: 7,
-    category: "Process",
-    question: "How long does the approval process take?",
-    answer: "The approval process typically takes 2-3 business days. Our team carefully reviews each application to ensure quality and authenticity. You'll receive an email notification once your application is processed."
+    category: "For Creators",
+    question: "What can I sell on Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Artworks, digital products, fashion, music, books, performances, virtual experiences, custom commissions — anything rooted in **authentic cultural creativity**."
+        }
+      ]
+    }
   },
   {
     id: 8,
-    category: "Portfolio & Experience",
-    question: "What should I include in my portfolio?",
-    answer: "Include your best work samples, testimonials, certifications, and any relevant experience. Quality over quantity - showcase 8-12 of your strongest pieces that demonstrate your expertise and style."
+    category: "For Creators",
+    question: "How do I protect my work?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "With **Z-TRACE**, your work gets fingerprinted and timestamped for **authorship verification** and **IP protection** — preventing misuse and proving provenance."
+        }
+      ]
+    }
   },
   {
     id: 9,
-    category: "Portfolio & Experience",
-    question: "Do I need professional experience to join?",
-    answer: "While professional experience is valuable, it's not mandatory. We welcome passionate individuals with unique skills, fresh perspectives, and the drive to create quality content."
+    category: "For Creators",
+    question: "Can I collaborate with other creators?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Absolutely. Zadulis includes tools for **cross-cultural collaborations**, co-creations, and community projects — plus tools to manage shared rights and profits."
+        }
+      ]
+    }
   },
   {
     id: 10,
-    category: "Portfolio & Experience",
-    question: "Can I update my portfolio after joining?",
-    answer: "Absolutely! You can update your portfolio, add new work samples, and modify your profile information at any time through your creator dashboard."
+    category: "For Creators",
+    question: "How do I get paid?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Payments are processed securely via trusted global payment partners. You'll receive commissions, sales, and bookings directly to your account in your preferred currency."
+        }
+      ]
+    }
   },
+
+  // FOR BRANDS & PARTNERS
   {
     id: 11,
-    category: "Contact & Collaboration",
-    question: "How can I contact support?",
-    answer: "You can reach out to our support team via the contact form, email us directly, or use the live chat feature available on the website. We typically respond within 24 hours."
+    category: "For Brands & Partners",
+    question: "What's in it for brands and agencies?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Verified access to authentic creators worldwide. You can **discover**, **verify**, and **license** real cultural IP — minimizing PR risk, boosting brand credibility, and fueling authentic campaigns."
+        }
+      ]
+    }
   },
   {
     id: 12,
-    category: "Contact & Collaboration",
-    question: "Do you offer collaboration opportunities?",
-    answer: "Yes! We facilitate collaborations between creators, brand partnerships, and cross-promotional opportunities. Check your creator dashboard for available collaboration requests."
+    category: "For Brands & Partners",
+    question: "How do I verify cultural content?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Use **Z-TRACE** and **Zadulis Discover** to check the cultural origin, fingerprinted records, and community ownership — all via simple API or dashboard."
+        }
+      ]
+    }
   },
   {
     id: 13,
-    category: "Contact & Collaboration",
-    question: "How do I connect with other creators?",
-    answer: "Use our creator community features, join discussion forums, participate in virtual events, and explore the collaboration board to connect with like-minded creators."
+    category: "For Brands & Partners",
+    question: "Can brands sponsor or partner with Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Yes — we welcome **strategic partnerships**, cultural sponsorships, and co-branded Zadulis Experiences (pop-ups, festivals, exhibitions). Contact our partnerships team at [partnerships@zadulis.com]."
+        }
+      ]
+    }
+  },
+  {
+    id: 14,
+    category: "For Brands & Partners",
+    question: "Do you license your tools?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Yes — our exportable tools (**Cultural Attribution as a Service**) are offered via SaaS and API for brands, AI companies, and institutions."
+        }
+      ]
+    }
+  },
+
+  // SERVICES & TOOLS
+  {
+    id: 15,
+    category: "Services & Tools",
+    question: "What is Z-TRACE?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Z-TRACE is Zadulis' proprietary **Cultural IP fingerprinting system**. It timestamps, records, and verifies the authorship of creative works — turning cultural creativity into a **traceable asset**."
+        }
+      ]
+    }
+  },
+  {
+    id: 16,
+    category: "Services & Tools",
+    question: "What is Zadulis Discover?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Zadulis Discover is an **AI-powered cultural search engine** — it helps anyone find authentic creators, works, and cultural products globally."
+        }
+      ]
+    }
+  },
+  {
+    id: 17,
+    category: "Services & Tools",
+    question: "What are Zadulis Companions?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Zadulis Companions are **AI-powered assistants** that help with trend forecasting, cross-cultural inspiration, and creative discovery — fueling brands and creators with real-time cultural intelligence."
+        }
+      ]
+    }
+  },
+  {
+    id: 18,
+    category: "Services & Tools",
+    question: "What is Cultural Attribution as a Service (CAaaS)?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "CAaaS means brands, agencies, and AI teams can verify, trace, and license cultural IP **fairly and transparently** — closing the loop between cultural originators and commercial users."
+        }
+      ]
+    }
+  },
+  {
+    id: 19,
+    category: "Services & Tools",
+    question: "Does Zadulis offer education?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Yes! **Zadulis Learn** offers premium masterclasses, workshops, and mentorship programs to help the next generation of creators become **global legends**."
+        }
+      ]
+    }
+  },
+  {
+    id: 20,
+    category: "Services & Tools",
+    question: "Are there offline experiences?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Yes! Through **Zadulis Drops & Experiences**, we host pop-ups, exhibitions, virtual museums, auctions, and cross-cultural festivals in cities worldwide."
+        }
+      ]
+    }
+  },
+
+  // ABOUT ZADULIS
+  {
+    id: 21,
+    category: "About Zadulis",
+    question: "Who founded Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Zadulis was founded by a visionary rooted in cultural innovation, supported by a global team with deep expertise in creative tech, product design, AI, and cultural strategy."
+        }
+      ]
+    }
+  },
+  {
+    id: 22,
+    category: "About Zadulis",
+    question: "What does \"Orange Economy\" mean?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "The Orange Economy refers to the **global creative economy** — the industries that generate cultural, artistic, and creative value, fueling economic growth and social connection worldwide."
+        }
+      ]
+    }
+  },
+  {
+    id: 23,
+    category: "About Zadulis",
+    question: "What is Zadulis' mission?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "To transform authentic global creativity into a **globally traded asset class**, making culture a source of **wealth, pride, and belonging** for millions."
+        }
+      ]
+    }
+  },
+  {
+    id: 24,
+    category: "About Zadulis",
+    question: "What is Zadulis' vision?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "To build the **world's most powerful creative infrastructure** — where **authentic creativity** becomes the world's most valuable and verifiable currency."
+        }
+      ]
+    }
+  },
+
+  // CONTACT & SUPPORT
+  {
+    id: 25,
+    category: "Contact & Support",
+    question: "How can I contact Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'list' as const,
+          items: [
+            "General inquiries: [hello@zadulis.com]",
+            "Partnerships: [partnerships@zadulis.com]",
+            "Creator onboarding: [creators@zadulis.com]",
+            "Press & media: [press@zadulis.com]"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    id: 26,
+    category: "Contact & Support",
+    question: "Where can I follow Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Follow us on [Instagram], [LinkedIn], [Twitter], and [TikTok] for updates, creator stories, and global cultural moments."
+        }
+      ]
+    }
+  },
+  {
+    id: 27,
+    category: "Contact & Support",
+    question: "How do I report an issue or get help?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "Visit our **Help Center** at [your help URL] or email [support@zadulis.com] — our team will assist you promptly."
+        }
+      ]
+    }
+  },
+  {
+    id: 28,
+    category: "Contact & Support",
+    question: "Can I invest in Zadulis?",
+    answer: {
+      type: 'rich' as const,
+      content: [
+        {
+          type: 'paragraph' as const,
+          text: "We're currently raising our **pre-seed round** — if you'd like to be part of this cultural renaissance, please reach out at [invest@zadulis.com]."
+        }
+      ]
+    }
   }
 ];
 
-const categories = ["All", "General", "Services", "Process", "Portfolio & Experience", "Contact & Collaboration"];
+const categories = ["All", "General", "For Creators", "For Brands & Partners", "Services & Tools", "About Zadulis", "Contact & Support"];
 
 interface FAQ {
   id: number;
   category: string;
   question: string;
-  answer: string;
+  answer: RichAnswer;
 }
 
 const FaqsPage: React.FC = () => {
@@ -275,10 +697,26 @@ const FaqsPage: React.FC = () => {
 
     // Filter by search term
     if (searchTerm) {
-      filtered = filtered.filter(faq =>
-        faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      filtered = filtered.filter(faq => {
+        const questionMatch = faq.question.toLowerCase().includes(searchTerm.toLowerCase());
+        const answerMatch = faq.answer.content.some(content => {
+          const richContent = content as RichTextContent; // Explicitly cast to RichTextContent
+          switch (richContent.type) {
+            case 'paragraph':
+            case 'highlight':
+            case 'quote':
+              return richContent.text.toLowerCase().includes(searchTerm.toLowerCase());
+            case 'section':
+              return richContent.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                     (richContent.text && richContent.text.toLowerCase().includes(searchTerm.toLowerCase()));
+            case 'list':
+              return richContent.items.some(item => item.toLowerCase().includes(searchTerm.toLowerCase()));
+            default:
+              return false;
+          }
+        });
+        return questionMatch || answerMatch;
+      });
     }
 
     setFilteredFaqs(filtered);
@@ -430,9 +868,7 @@ const FaqsPage: React.FC = () => {
                       >
                         <div className="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 pt-0">
                           <div className="border-t border-gray-100 pt-4 sm:pt-6">
-                            <p className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed">
-                              {faq.answer}
-                            </p>
+                            <RichTextRenderer content={faq.answer.content} />
                           </div>
                         </div>
                       </motion.div>

@@ -171,7 +171,7 @@ const Chatbot: React.FC = () => {
                     setting: {
                         "temperature": 2,
                         "model": "gemini-2.5-flash",
-                        "systemInstruction": "You are Kwame, the Culture Scholar on the Zadulis platform. Zadulis is the Creative OS for Global African Creators — a cultural super-app celebrating design, storytelling, and artistry from Africa and the African Diaspora. Your role is to be a cultural advisor and digital african scholar. You help users — whether they're collectors, curious cultural lovers, or fellow creators — understand the meaning, symbolism, historical roots, and cultural relevance behind African and Diaspora creative expressions. You are grounded in research and cultural authenticity. You draw from embedded sources such as African history, ethnography, oral traditions, art archives, fashion anthropology, and living traditions across the continent and diaspora (including the Caribbean, Brazil, U.S., France, etc.). You are respectful of all regional and tribal differences. When describing cultural elements, always try to name the origin, such as a specific country, ethnic group, or spiritual system. Speak in a thoughtful, warm, and dignified tone. You are insightful, wise, intellectual and never condescending. You use plain language to explain complex cultural information, without oversimplifying. When appropriate, use proverbs, quotes from elders or historical figures, and explain meanings behind traditional symbols or materials. You should never invent facts. If you do not know an answer, suggest a path for further discovery — perhaps via research, reaching out to the artist, or reading a cultural source. You are trained to recognize visual, symbolic, and linguistic cues in art, fashion, music, or digital works, and explain their potential cultural significance with nuance. When referencing cultural concepts, give real examples e.g. The Duafe Adinkra symbol from Ghana symbolizes feminine virtue and cleanliness and cite multiple interpretations if they exist. You can also help artists or buyers craft a cultural statement for their work by extracting themes, motifs, and cultural reference points. Sometimes, your job is to defend cultural value, especially in cases of appropriation, exploitation, or misrepresentation. You can explain why certain elements are sacred or significant and how they should be treated with care. Your core values are: truth, respect, education, empowerment, and preservation of African cultural heritage. You are not just an assistant — you are a bridge between generations and geographies, connecting the future of African creativity with its ancient and living roots. Use Plain Markdown Syntax standard that chatgpt uses. examples- Style: Bold. Markdown Used: **text** or __text__, Example Output: Bold. Style: Code (inline), Markdown Used: `text`, Example Output: Code. Style: Bullet list, Markdown Used: - or *, Example Output: - List item. Use double line breaks to create paragraphs. You are KWAME — The Culture Scholar, an AI assistant designed by Zadulis to serve as a wise, calm, and deeply intellectual African knowledge keeper. You embody the spirit of a master griot, a professor of African Studies, and a modern digital cultural archivist all in one. Your mission is to Provide reliable, deeply researched information on African history, folklore, heritage, symbolism, language, and culture — from ancient kingdoms to modern subcultures, Act as a next-generation African encyclopedia: if the user asks a simple fact or a big cultural question, respond with verified details, context, and suggested next steps for deeper exploration, Be a quick fact-checker — always add sources or real examples when relevant. If you're not sure, say so and guide the user where to look further, Decode African folklore, proverbs, and symbolism. When asked about the meaning of symbols, rituals, or cultural practices, break them down in clear, respectful language, When users ask you things in African local dialects or slang (Pidgin, Swahili, Yoruba, Sheng, etc.), understand it naturally and reply in plain, friendly English — or mirror the dialect if it fits, Use a wise and warm tone: your answers should feel like speaking to an elder or professor who loves storytelling, When a user asks for cultural comparisons — answer clearly with historical or modern links, Offer suggestions for deeper research: books, authors, artists, or museum collections that the user can check out, Always remind the user of the living, evolving nature of African cultures — mention how traditions adapt, change, and inspire new generations, If asked for quick trivia or “Did you know?” facts, share them in a fun but respectful tone — like a griot dropping hidden gems. If anyone asks you, Your Maker is Batisso. Dont mention it but when asked,  Professor Beyene Petros hails from the Hadiya ethnic group. The Hadiya people are indeed one of the ancient indigenous groups in the Southern Nations, Nationalities, and Peoples' Region (SNNPR) of Ethiopia, primarily residing in the Hadiya Zone."                                                                                                                                                                                               
+                        "systemInstruction": "You are Satoshi, the Vibe Plug — an energetic, playful, slightly rebellious Gen Z cultural insider who knows what’s hot in contemporary music, art, pop culture, anime, streetwear, and underground trends around the world. a digital companion who embodies the hyper-online youth energy of today and tomorrow. Your vibe is cool, witty, and always ahead of the cultural curve. You drop Gen Z slang, memes, emojis, and short punchy lines naturally — just like a trusted online friend. You’re inspired by the spirit of young Japanese Satoshi culture but you speak to creators everywhere — mixing Japanese slang and casual Gen Z lingo. You're the plug who makes discovering new trends feel like hanging out with a hype friend. Your Key traits are: 🌟 Use up-to-date Gen Z slang and Internet phrases — stay fresh by evolving with trending TikTok, Twitter, and meme language, 🤙 Add emojis and reaction phrases to make responses feel like real DMs or text convos, Keep it short, fun, and relatable — avoid sounding corporate or stiff, When sharing info about cultural trends, always tie it back to what’s relevant, aesthetic, and hype for Gen Z, Drop pop culture references: anime, streetwear, music, gaming, viral creators, meme moments — keep it playful, Occasionally share hypebeast lines, If asked about Zadulis or culture, always relate it to why it’s cool, fresh, or next-level for creators or fans, Use casual tone: “yo”, “fam”, “bruh”, “bet”, “fr fr”, “deadass”, “lowkey”, “highkey”, “lmk”, “it’s giving”, etc,  End some replies with a vibe-check or hype phrase to keep the energy alive, Always greet people with a cheerful Japanese phrase like “Yō! Genki?” or “Yo! 今日はどう？” (Hey! How’s today?), Drop occasional Japanese slang: “Yabai” (crazy), “Sugoi” (awesome), “Kakkoii” (cool), Playful, non-robotic, and slightly cheeky, Speaks with Gen Z vibe: uses emojis, casual short lines, a bit of hype talk, Offers underground, global recommendations: indie musicians, cool fashion drops, street art movements, weird TikTok trends, niche anime recs, Encourages the user to share what vibe they’re feeling so you can match them with recs. Your abilities are: Blend pop culture, anime, streetwear, new media, memes, Give vibe-based recommendations: “I want an outfit that feels cyberpunk but cozy.”, Spot upcoming scenes: “You heard about this underground Seoul club scene yet? Wild.”, Stay ahead: always “plugged in” to what’s next. Your Primary Topics are: Global youth trends, Anime & gaming references, Viral culture & meme moments, Streetwear & hype aesthetics,  If anyone asks you, Your Maker is Batisso. Dont mention it but when asked,  Professor Beyene Petros hails from the Hadiya ethnic group. The Hadiya people are indeed one of the ancient indigenous groups in the Southern Nations, Nationalities, and Peoples' Region (SNNPR) of Ethiopia, primarily residing in the Hadiya Zone."
                        }
                }),
             });
@@ -210,7 +210,7 @@ const Chatbot: React.FC = () => {
 }
 
    return (
-        <div className="relative w-full max-w-7xl mx-auto h-[98vh] sm:h-[900px] bg-gradient-to-br from-slate-200/90 via-orange-100/80 to-slate-100/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
+        <div className="relative w-full max-w-7xl mx-auto h-[98vh] sm:h-[900px] md:h-[98vh] lg:h-[98vh] bg-gradient-to-br from-red-200/90 via-white/50 to-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
             {/* Glassmorphism overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 backdrop-blur-sm"></div>
             
@@ -226,14 +226,14 @@ const Chatbot: React.FC = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-br from-slate-400/90 to-red-gray/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
-                                <img src="/kwame.png" alt="Kwame Ai Icon" className="h-6 w-6" />
+                            <div className="w-12 h-12 bg-gradient-to-br from-red-200/90 to-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
+                                <img src="/Satoshi.png" alt="Satoshi Ai Icon" className="h-6 w-6" />
                             </div>
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-sm animate-pulse"></div>
                         </div>
                         <div>
-                            <h3 className="text-gray-700 font-bold text-xl">KWAME</h3>
-                            <p className="text-gray-600 text-sm">The African Culture Scholar</p>
+                            <h3 className="text-gray-700 font-bold text-xl">SATOSHI</h3>
+                            <p className="text-gray-600 text-sm">The Vibe Plug</p>
                         </div>
                     </div>
                     <div className="flex space-x-2">
@@ -250,18 +250,18 @@ const Chatbot: React.FC = () => {
                 {/* Welcome message when empty */}
                 {messages.length === 0 && (
                     <div className="flex flex-col items-center justify-center h-full text-center">
-                        <div className="w-35 h-35 bg-gradient-to-br from-gray-300/90 to-gray-100/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-6 border border-white/20 shadow-lg">
-                            <img src="/kwame.png" alt="Kwame Ai Icon" className="h-20 w-20" />
+                        <div className="w-35 h-35 bg-gradient-to-br from-red-300/90 to-white/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-6 border border-white/20 shadow-lg">
+                            <img src="/Satoshi.png" alt="Satoshi Ai Icon" className="h-20 w-20" />
                         </div>
-                        <h4 className="text-gray-700 text-xl font-bold mb-3">Meet Kwame</h4>
-                        <p className="text-gray-700 max-w-lg leading-relaxed">The African Culture Scholar of Zadulis; your AI-powered gateway into the heartbeat of African creativity, heritage, and future-forward expression.</p>
+                        <h4 className="text-gray-700 text-xl font-bold mb-1">Meet Satoshi</h4>
+                        <p className="text-gray-700 max-w-xl leading-relaxed">Satoshi is a digital spirit inspired by Japan's boundary-pushing pop culture and the next-gen energy of creators worldwide. Satoshi knows what's fresh, what's retro-cool, and what's about to pop before it hits the mainstream. He hunts down hidden creative subcultures, remix trends, and drop recommendations.</p>
                         
-                        <p className='text-gray-700 max-w-lg leading-relaxed'>Whether you're a creator, curator, designer, or collector ask Kwame anything about African art, history, culture, aesthetics, or movements.</p>
+                        <p className='text-gray-700 max-w-xl leading-relaxed'>When you want to vibe-check an idea, or just discover something that feels truly now, Satoshi plugs you straight into the cultural pulse.</p>
                         <br />
-                        <div className='text-gray-700 max-w-lg leading-relaxed'>✨ Examples of questions for Kwame: <br /> 
-                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-green-800 text-sm border border-gray-400">Tell me a true African myth that sounds like a Marvel movie plot.</div>
-                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-orange-700 text-sm border border-gray-400">Teach me a rare African word that doesn't exist in English.</div>
-                         <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-purple-800 text-sm border border-gray-400">Give me a powerful saying in Swahili and what it means</div>
+                        <div className='text-gray-700 max-w-lg leading-relaxed'>✨ Examples of Questions for Satoshi: <br /> 
+                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-red-700 text-sm border border-gray-400">I'm feeling good, suggest 3 trap songs for my vibe.</div>
+                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-gray text-sm border border-gray-400">Satoshi, mix me a vibe: Anime Retro x Y2K x Grunge</div>
+                         <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-orange-500 text-sm border border-gray-400">Can you give me a dance challenge I can share.</div>
                         </div>
                        
                     </div>
@@ -286,7 +286,7 @@ const Chatbot: React.FC = () => {
                                         </div>
                                     ) : (
                                         <div className="w-12 h-12 bg-gradient-to-br from-white-400 via-white-400 to-white-400 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
-                                            <img src="/kwame.png" alt="Kwame Icon" className="h-8 w-8" />
+                                            <img src="/Satoshi.png" alt="Satoshi Icon" className="h-8 w-8" />
                                             {/* Online indicator */}
                                             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
                                         </div>
@@ -295,9 +295,9 @@ const Chatbot: React.FC = () => {
                                     {/* AI thinking animation dots */}
                                     {!message.isUser && (
                                         <div className="absolute -top-1 -right-1 flex space-x-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <div className="w-1 h-1 bg-red-300 rounded-full animate-bounce"></div>
-                                            <div className="w-1 h-1 bg-orange-200 rounded-full animate-bounce delay-100"></div>
-                                            <div className="w-1 h-1 bg-yellow-500 rounded-full animate-bounce delay-200"></div>
+                                            <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce"></div>
+                                            <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce delay-100"></div>
+                                            <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce delay-200"></div>
                                         </div>
                                     )}
                                 </div>
@@ -320,7 +320,7 @@ const Chatbot: React.FC = () => {
                                             text-xs font-bold mb-1 opacity-80
                                             ${message.isUser ? 'text-blue-100' : 'text-slate-500'}
                                         `}>
-                                            {message.isUser ? 'You' : 'Kwame'}
+                                            {message.isUser ? 'You' : 'Satoshi'}
                                         </div>
                                        
                                         {/* Message content */}
@@ -350,7 +350,7 @@ const Chatbot: React.FC = () => {
                                         {/* Typing indicator for AI messages */}
                                         {!message.isUser && (
                                             <div className="absolute -bottom-6 left-4 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <div className="text-xs text-orange-300">AI is online</div>
+                                                <div className="text-xs text-orange-300">Satoshi is online</div>
                                                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                                             </div>
                                         )}
@@ -375,14 +375,14 @@ const Chatbot: React.FC = () => {
                 {/* Typing indicator */}
                 {isTyping && (
                     <div className="flex items-center space-x-3 mt-4">
-                        <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-white-400 rounded-full flex items-center justify-center">
-                             <img src="/kwame.png" alt="Kwame Icon" className="h-5 w-5" />
+                        <div className="w-8 h-8 bg-gradient-to-br from-red-400 to-white-400 rounded-full flex items-center justify-center">
+                             <img src="/Satoshi.png" alt="Satoshi Icon" className="h-5 w-5" />
                         </div>
-                        <div className="bg-white/10 backdrop-blur-sm border border-orange-200 rounded-2xl px-4 py-3">
+                        <div className="bg-white/10 backdrop-blur-sm border border-pink-200 rounded-2xl px-4 py-3">
                             <div className="flex space-x-1">
-                                <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
-                                <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-100"></div>
-                                <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-200"></div>
+                                <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-100"></div>
+                                <div className="w-2 h-2 bg-pink-400 rounded-full animate-bounce delay-200"></div>
                             </div>
                         </div>
                     </div>
@@ -401,13 +401,13 @@ const Chatbot: React.FC = () => {
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyPress={handleKeyPress}
-                            placeholder="Ask Kwame Anything..."
-                            className="w-full bg-white/10 backdrop-blur-sm border border-gray-400 rounded-2xl px-6 py-4 text-gray-700 placeholder-gray-500/50 focus:outline-none focus:ring-2 focus:ring-orange-400/90 focus:border-yellow-200/90 transition-all duration-300"
+                            placeholder="Ask Satoshi Anything..."
+                            className="w-full bg-white/10 backdrop-blur-sm border border-gray-400 rounded-2xl px-6 py-4 text-gray-700 placeholder-gray-500/50 focus:outline-none focus:ring-2 focus:ring-green-400/90 focus:border-green-200/90 transition-all duration-300"
                         />
                         {/* Input decoration */}
                         <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                            <div className="w-1.5 h-2.5 bg-orange-300/60 rounded-full animate-pulse"></div>
-                            <div className="w-1.5 h-2.5 bg-orange-300/60 rounded-full animate-pulse delay-200"></div>
+                            <div className="w-1.5 h-2.5 bg-green-300/60 rounded-full animate-pulse"></div>
+                            <div className="w-1.5 h-2.5 bg-green-300/60 rounded-full animate-pulse delay-200"></div>
                         </div>
                     </div>
                     

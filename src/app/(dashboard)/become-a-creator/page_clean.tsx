@@ -308,7 +308,7 @@ const SpinningGlobe: React.FC = () => {
   );
 };
 
-// Clean Thank You Card Component
+// Clean Thank You Card Component - Lines 320-450
 const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName: string }> = ({ 
   isVisible, 
   onClose, 
@@ -318,7 +318,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
     <AnimatePresence>
       {isVisible && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop - Line 330 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -326,7 +326,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
             onClick={onClose}
           >
-            {/* Thank You Card */}
+            {/* Thank You Card - Line 340 */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 50 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -340,7 +340,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
               className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-8 sm:p-10 md:p-12 max-w-md sm:max-w-lg w-full mx-4 shadow-2xl border border-gray-200/50 overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Animated Background Elements */}
+              {/* Animated Background Elements - Line 355 */}
               <div className="absolute inset-0 overflow-hidden">
                 <motion.div
                   className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-green-200/20 to-emerald-200/20 rounded-full blur-2xl"
@@ -369,7 +369,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                 />
               </div>
 
-              {/* Close Button */}
+              {/* Close Button - Line 380 */}
               <motion.button
                 onClick={onClose}
                 className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200 z-10"
@@ -379,9 +379,9 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                 <X className="w-4 h-4 text-gray-600" />
               </motion.button>
 
-              {/* Content */}
+              {/* Content - Line 390 */}
               <div className="relative z-10 text-center">
-                {/* Success Icon */}
+                {/* Success Icon - Line 392 */}
                 <div className="flex justify-center items-center mb-8">
                   <motion.div
                     initial={{ scale: 0, rotate: -180 }}
@@ -393,7 +393,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                   </motion.div>
                 </div>
 
-                {/* Main Message */}
+                {/* Main Message - Line 405 */}
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -412,7 +412,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                   Your creator application has been submitted successfully! We're reviewing your request and will email you with our decision within 3-5 business days.
                 </motion.p>
 
-                {/* Next Steps */}
+                {/* Next Steps - Line 425 */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -436,7 +436,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                   </ul>
                 </motion.div>
 
-                {/* Action Button */}
+                {/* Action Button - Line 445 */}
                 <motion.button
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -650,7 +650,7 @@ const Page: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative text-center mb-6 sm:mb-8 md:mb-10 z-10"
             >
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 tracking-tight">
                 Become A Zadulis Creator
               </h1>
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto leading-relaxed px-4">

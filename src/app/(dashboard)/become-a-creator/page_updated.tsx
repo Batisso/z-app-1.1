@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Upload, X, Camera, Send, User, Mail, MapPin, Globe, FileText, ChevronDown, Search, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { Upload, X, Camera, Send, User, Mail, MapPin, Globe, FileText, ChevronDown, Search, Loader2, CheckCircle, AlertCircle, Heart, Star, Sparkles } from "lucide-react";
 
 // Complete list of all countries in the world
 const allCountries = [
@@ -308,7 +308,7 @@ const SpinningGlobe: React.FC = () => {
   );
 };
 
-// Clean Thank You Card Component
+// Thank You Card Component
 const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName: string }> = ({ 
   isVisible, 
   onClose, 
@@ -343,7 +343,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
               {/* Animated Background Elements */}
               <div className="absolute inset-0 overflow-hidden">
                 <motion.div
-                  className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-green-200/20 to-emerald-200/20 rounded-full blur-2xl"
+                  className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-orange-200/30 to-yellow-200/30 rounded-full blur-2xl"
                   animate={{
                     scale: [1, 1.2, 1],
                     rotate: [0, 180, 360],
@@ -355,7 +355,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                   }}
                 />
                 <motion.div
-                  className="absolute -bottom-10 -left-10 w-24 h-24 bg-gradient-to-br from-blue-200/20 to-teal-200/20 rounded-full blur-2xl"
+                  className="absolute -bottom-10 -left-10 w-24 h-24 bg-gradient-to-br from-red-200/30 to-orange-200/30 rounded-full blur-2xl"
                   animate={{
                     scale: [1, 1.1, 1],
                     rotate: [360, 180, 0],
@@ -381,15 +381,33 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
 
               {/* Content */}
               <div className="relative z-10 text-center">
-                {/* Success Icon */}
-                <div className="flex justify-center items-center mb-8">
+                {/* Animated Icons */}
+                <div className="flex justify-center items-center gap-2 mb-6">
                   <motion.div
                     initial={{ scale: 0, rotate: -180 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ delay: 0.2, type: "spring", damping: 15 }}
-                    className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center shadow-lg"
+                    className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center"
                   >
-                    <CheckCircle className="w-8 h-8 text-white" />
+                    <CheckCircle className="w-6 h-6 text-white" />
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ scale: 0, rotate: 180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.4, type: "spring", damping: 15 }}
+                    className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center"
+                  >
+                    <Heart className="w-5 h-5 text-white" />
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.6, type: "spring", damping: 15 }}
+                    className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center"
+                  >
+                    <Star className="w-4 h-4 text-white" />
                   </motion.div>
                 </div>
 
@@ -400,37 +418,65 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                   transition={{ delay: 0.3 }}
                   className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4"
                 >
-                  Thank You, {userName}
+                  Thank You, {userName}! 🎉
                 </motion.h2>
 
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="text-gray-700 text-base sm:text-lg leading-relaxed mb-8"
+                  className="text-gray-700 text-base sm:text-lg leading-relaxed mb-6"
                 >
-                  Your creator application has been submitted successfully! We're reviewing your request and will email you with our decision within 3-5 business days.
+                  Your creator application has been submitted successfully! We're excited to review your portfolio and will get back to you within 3-5 business days.
                 </motion.p>
+
+                {/* Floating Sparkles */}
+                <div className="relative mb-6">
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute"
+                      style={{
+                        left: `${20 + (i * 12)}%`,
+                        top: `${10 + (i % 2) * 20}px`,
+                      }}
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ 
+                        opacity: [0, 1, 0],
+                        scale: [0, 1, 0],
+                        y: [0, -20, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: i * 0.3,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <Sparkles className="w-4 h-4 text-yellow-500" />
+                    </motion.div>
+                  ))}
+                </div>
 
                 {/* Next Steps */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
-                  className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-4 sm:p-6 mb-8"
+                  className="bg-gradient-to-r from-orange-50 to-yellow-50 rounded-2xl p-4 sm:p-6 mb-6"
                 >
-                  <h3 className="font-semibold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent mb-3 text-sm sm:text-base">What happens next?</h3>
+                  <h3 className="font-semibold text-gray-800 mb-3 text-sm sm:text-base">What happens next?</h3>
                   <ul className="text-left text-gray-600 text-xs sm:text-sm space-y-2">
                     <li className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
                       Our team will review your application
                     </li>
                     <li className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
-                      We'll email you with our decision
+                      <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
+                      We'll send you an email with the decision
                     </li>
                     <li className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
                       If approved, you'll get access to creator tools
                     </li>
                   </ul>
@@ -442,7 +488,7 @@ const ThankYouCard: React.FC<{ isVisible: boolean; onClose: () => void; userName
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.9 }}
                   onClick={onClose}
-                  className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white font-semibold py-3 px-6 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -632,7 +678,7 @@ const Page: React.FC = () => {
         }}
       />
 
-      {/* Main Content */}
+      {/* Main Content - Moved higher up */}
       <div className="relative z-10 pt-2 sm:pt-4 md:pt-6 lg:pt-8 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-2 sm:px-4 md:px-6 lg:px-8 min-h-[120vh]">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -640,7 +686,7 @@ const Page: React.FC = () => {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="w-full max-w-7xl mx-auto"
         >
-          <div className="relative backdrop-blur-xl border border-gray-200/60 rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-xl shadow-gray-400/70 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 overflow-hidden min-h-[95vh] sm:min-h-[88vh]">
+          <div className="relative  backdrop-blur-xl border border-gray-200/60 rounded-xl sm:rounded-2xl lg:rounded-3xl shadow-xl shadow-gray-400/70 p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 overflow-hidden min-h-[95vh] sm:min-h-[88vh]">
             <SpinningGlobe />
             
             {/* Header */}
@@ -650,7 +696,7 @@ const Page: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="relative text-center mb-6 sm:mb-8 md:mb-10 z-10"
             >
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-extrabold bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 tracking-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent mb-3 sm:mb-4 md:mb-6 tracking-tight">
                 Become A Zadulis Creator
               </h1>
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto leading-relaxed px-4">
@@ -692,9 +738,9 @@ const Page: React.FC = () => {
                   transition={{ duration: 0.5, delay: 0.4 }}
                   className="space-y-3 sm:space-y-4"
                 >
-                  <label className="flex items-center gap-2 font-medium text-sm sm:text-base md:text-lg">
+                  <label className="flex items-center gap-2  font-medium text-sm sm:text-base md:text-lg">
                     <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 flex items-center justify-center">
-                      <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                      <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 " />
                     </div>
                     Email Address
                   </label>
@@ -739,9 +785,9 @@ const Page: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.7 }}
                 className="space-y-3 sm:space-y-4"
               >
-                <label className="flex items-center gap-2 font-medium text-sm sm:text-base md:text-lg">
+                <label className="flex items-center gap-2  font-medium text-sm sm:text-base md:text-lg">
                   <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center">
-                    <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                    <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5 " />
                   </div>
                   Bio
                 </label>
@@ -891,7 +937,7 @@ const Page: React.FC = () => {
                       className="mt-4 text-center"
                     >
                       <p className="text-green-600 font-medium text-sm sm:text-base">
-                        Thank you! Your creator application has been submitted successfully. We'll review it and get back to you soon!
+                        🎉 Thank you! Your creator application has been submitted successfully. We'll review it and get back to you soon!
                       </p>
                     </motion.div>
                   )}
@@ -904,7 +950,7 @@ const Page: React.FC = () => {
                       className="mt-4 text-center"
                     >
                       <p className="text-red-600 font-medium text-sm sm:text-base">
-                        Something went wrong. Please check your connection and try again.
+                        ❌ Something went wrong. Please check your connection and try again.
                       </p>
                     </motion.div>
                   )}

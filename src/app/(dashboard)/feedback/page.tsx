@@ -51,28 +51,39 @@ const FeedbackPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setSubmitted(true);
-    setIsSubmitting(false);
-    
-    // Reset form after success
-    setTimeout(() => {
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        feedbackType: "",
-        comments: ""
+    try {
+      const res = await fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
-      setSubmitted(false);
-    }, 3000);
+      if (res.ok) {
+        setSubmitted(true);
+        // Reset form after success
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            email: '',
+            subject: '',
+            feedbackType: '',
+            comments: ''
+          });
+          setSubmitted(false);
+        }, 3000);
+      } else {
+        const error = await res.json();
+        console.error('Submission error:', error);
+        alert('Failed to submit feedback');
+      }
+    } catch (error) {
+      console.error('Submission exception:', error);
+      alert('Failed to submit feedback');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (field: keyof FeedbackFormData, value: string) => {
@@ -83,7 +94,7 @@ const FeedbackPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50/50">
+    <div className="relative min-h-screen bg-gradient-to-br">
       {/* Background Animation */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -131,13 +142,13 @@ const FeedbackPage = () => {
           >
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 flex items-center justify-center">
-                <MessageSquare className="w-6 h-6 text-white" />
+                <MessageSquare className="w-6 h-6 " />
               </div>
               <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent">
                 Feedback
               </h1>
             </div>
-            <p className="text-gray-600 text-lg max-w-lg mx-auto">
+            <p className=" text-lg max-w-lg mx-auto">
               We value your feedback! Help us improve by sharing your thoughts, suggestions, or reporting issues.
             </p>
           </motion.div>
@@ -147,7 +158,7 @@ const FeedbackPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
-            className="bg-white/80 backdrop-blur-xl border border-gray-200/50 rounded-3xl shadow-xl shadow-gray-200/20 p-8 md:p-10"
+            className=" backdrop-blur-xl border border-gray-200/50 rounded-3xl shadow-xl shadow-gray-200/20 p-8 md:p-10"
           >
             <AnimatePresence mode="wait">
               {submitted ? (
@@ -165,7 +176,7 @@ const FeedbackPage = () => {
                     transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                     className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center"
                   >
-                    <CheckCircle className="w-10 h-10 text-white" />
+                    <CheckCircle className="w-10 h-10 " />
                   </motion.div>
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
@@ -200,7 +211,7 @@ const FeedbackPage = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
                     >
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold mb-2">
                         <User className="w-4 h-4 inline mr-2" />
                         Name
                       </label>
@@ -241,7 +252,7 @@ const FeedbackPage = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, ease: "easeOut", delay: 0.2 }}
                     >
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold mb-2">
                         <Mail className="w-4 h-4 inline mr-2" />
                         Email Address
                       </label>
@@ -283,7 +294,7 @@ const FeedbackPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: "easeOut", delay: 0.3 }}
                   >
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold mb-2">
                       <FileText className="w-4 h-4 inline mr-2" />
                       Subject
                     </label>
@@ -324,7 +335,7 @@ const FeedbackPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: "easeOut", delay: 0.4 }}
                   >
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    <label className="block text-sm font-semibold mb-3">
                       <Tag className="w-4 h-4 inline mr-2" />
                       Feedback Type
                     </label>
@@ -383,7 +394,7 @@ const FeedbackPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: "easeOut", delay: 0.6 }}
                   >
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-sm font-semibold mb-2">
                       <MessageSquare className="w-4 h-4 inline mr-2" />
                       Comments
                     </label>

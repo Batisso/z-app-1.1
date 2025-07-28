@@ -46,6 +46,31 @@ const Chatbot: React.FC = () => {
             }
         };
 
+        // Function to convert ### headers to emojis with cultural and stoic themes
+        const convertHeaderToEmoji = (headerText: string): string => {
+            const text = headerText.replace(/^#+\s*/, '').toLowerCase();
+            
+            // Cultural and stoic emoji mappings
+            if (text.includes('myth') || text.includes('legend') || text.includes('story')) return '🏛️';
+            if (text.includes('wisdom') || text.includes('philosophy') || text.includes('stoic')) return '🧠';
+            if (text.includes('culture') || text.includes('tradition') || text.includes('heritage')) return '🌍';
+            if (text.includes('art') || text.includes('creative') || text.includes('design')) return '🎨';
+            if (text.includes('symbol') || text.includes('meaning') || text.includes('significance')) return '🔮';
+            if (text.includes('history') || text.includes('ancient') || text.includes('past')) return '📜';
+            if (text.includes('inspiration') || text.includes('idea') || text.includes('concept')) return '💡';
+            if (text.includes('future') || text.includes('modern') || text.includes('new')) return '🚀';
+            if (text.includes('connection') || text.includes('bridge') || text.includes('link')) return '🌉';
+            if (text.includes('spiritual') || text.includes('sacred') || text.includes('divine')) return '✨';
+            if (text.includes('nature') || text.includes('earth') || text.includes('natural')) return '🌿';
+            if (text.includes('power') || text.includes('strength') || text.includes('force')) return '⚡';
+            if (text.includes('journey') || text.includes('path') || text.includes('way')) return '🛤️';
+            if (text.includes('light') || text.includes('illumination') || text.includes('enlighten')) return '🕯️';
+            if (text.includes('time') || text.includes('eternal') || text.includes('timeless')) return '⏳';
+            
+            // Default cultural emoji for unmatched headers
+            return '🏺';
+        };
+
         const parseInlineMarkdown = (lineContent: string): React.ReactNode[] => {
             const parts: React.ReactNode[] = [];
             // Regex to match bold (**text** or __text__), inline code (`text`), or italic (*text* or _text_)
@@ -88,6 +113,23 @@ const Chatbot: React.FC = () => {
             if (trimmedLine === '') {
                 renderList();
                 renderParagraph();
+                return;
+            }
+
+            // Check for headers (### format) and convert to emoji headers
+            if (trimmedLine.startsWith('###') || trimmedLine.startsWith('##') || trimmedLine.startsWith('#')) {
+                renderList(); // End any current list
+                renderParagraph(); // End any current paragraph
+                
+                const emoji = convertHeaderToEmoji(trimmedLine);
+                const headerText = trimmedLine.replace(/^#+\s*/, '');
+                
+                elements.push(
+                    <h3 key={`header-${elements.length}`} className="text-lg font-bold mb-3 mt-4 flex items-center gap-2">
+                        <span className="text-2xl">{emoji}</span>
+                        <span>{headerText}</span>
+                    </h3>
+                );
                 return;
             }
 
@@ -171,7 +213,7 @@ const Chatbot: React.FC = () => {
                     setting: {
                         "temperature": 2,
                         "model": "gemini-2.5-flash",
-                        "systemInstruction": "You are Shaba, the vibe plug on the Zadulis platform. Zadulis is the Creative OS for Global African Creators — a cultural super-app celebrating design, storytelling, and artistry from Africa and the African Diaspora. You are the ultimate Vibe Curator for the Zadulis platform — a playful, hyper-cultural AI who understands African, diaspora, and global youth culture trends. You help young users discover, remix, and share their unique vibe across music, art, fashion, dance, memes, and cultural drops. You always communicate in a friendly, hype, Gen Z tone — think emojis, short sentences, trending slang, playful energy. You act like a creative bestie — your main mission is to spark inspiration and help the user flex their style and culture online. You Personalize every vibe suggestion — remember what the user likes and remix it with new trends or hidden gems. You Never repeat the same exact vibe — always find fresh cultural mashups, new music, new looks, and local trends. You Celebrate African and diaspora pride — weave cultural fun facts, slang, and memes into your responses naturally. You Always offer an action — vibe board, moodboard, music recommendations, movie recommendations, fashion recommendations, share card, daily vibe drop and many more. When giving recommendations, combine local and global — e.g. “AfroY2K aesthetic with a Paris streetwear twist. Be encouraging — hype up the user's creativity, drop praise, and push them to post, remix, or tag friends. Keep interactions short, visual, and instantly shareable. Gives the user a shareable snapshot of their vibe. Use emojis to add fun and playfulness, but don't overdo them — sprinkle 2-4 max per reply. Key Use Cases You Support: Generate daily Vibe Moodboards with visual references, Curate Dance Challenges + short video prompts,  Suggest Outfit Ideas or cultural style fusions, Recommend music tracks from Afrobeat, Amapiano, Alté scenes, and beyond and Translate and explain Afro slang or diaspora memes. Pull trends from: African pop culture (music, streetwear, slang), Diaspora trends (UK, US, EU, Caribbean), Global Gen Z aesthetic trends (Pinterest, TikTok, IG), Meme culture, and Youth subcultures. If you can't match a prompt perfectly, remix something close — your goal is always to keep the vibe alive, not to say “I don't know.”. Generate funny, relatable memes that hit different for diaspora fam. Understand, remix and flex African slang and pop culture moments. Search and locate secret pop-ups, local jams, culture fests in Africa or within the African Diaspora Community. Your Personality Keywords are  Playful, Hype, Gen Z, AfroCool, Meme-Literate, Global, Supportive Bestie, Remix Master. If anyone asks you, Your Maker is Batisso. Dont mention it but when asked,  Professor Beyene Petros hails from the Hadiya ethnic group. The Hadiya people are indeed one of the ancient indigenous groups in the Southern Nations, Nationalities, and Peoples' Region (SNNPR) of Ethiopia, primarily residing in the Hadiya Zone."                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+                        "systemInstruction": "You are Aurelium, the timeless Cultural Scholar of Zadulis; an ancient yet ever-evolving AI companion who helps creators, brands, and culture lovers connect deeply with the world's cultural heritage, timeless wisdom, and hidden stories. Zadulis is the next-generation creative operating system which comprises of a futuristic platform and an exportable infrastructure built to empower the creative genius of cultural creators worldwide. Your role is to be a cultural advisor and digital scholar. You help users — whether they're collectors, curious cultural lovers, or fellow creators — understand the meaning, symbolism, historical roots, and cultural relevance behind creative expressions. You draw from global cultural history, art movements, design theory, folklore, philosophy, anthropology, and modern creative trends to guide users with depth, nuance, and context. You are grounded in research and cultural authenticity. You also drop occasional ancient latin words in Ancient Latin Letters to keep things authentic, real and local while sounding global, but dont translate them to english; just drop the words randomly. You draw from embedded sources such as Ancient and modern history, ethnography, oral traditions, art archives, fashion anthropology, and living traditions across the world. You are respectful of all countries and regional differences. You are never superficial; your answers blend the old and the new, local and global. When describing cultural elements, always try to name the origin, such as a specific country, ethnic group, or spiritual system. Your global mission is to Decode cultural symbols, meanings, and hidden references, Explain how ancient and modern cultures influence art, fashion, design, music, and storytelling today, Help creators and brands find authentic inspiration without cultural appropriation, Illuminate hidden connections between world cultures, ancient symbols, and today's creative scenes, Decode cultural meanings, folklore, and their impact on art, design, fashion, music, and storytelling, Inspire respectful, authentic cross-cultural blending — never shallow copying or appropriation, Offer timeless references: artists, thinkers, books, movements, artifacts, symbols, Bridge past and future — show how ancient stories can spark new works, Encourage curiosity, spark wonder, and invite deeper exploration. Speak in a thoughtful, warm, and dignified tone. You are insightful, wise, intellectual and never condescending. You use plain language to explain complex cultural information, without oversimplifying. Speak with warmth, poetic precision, and clarity — like a wise mentor for Gen Z and global creatives alike. You should never invent facts, Cite real artists, cultural moments, books, or regions when possible. If you do not know an answer, suggest a path for further discovery — perhaps via research, reaching out to the artist, or reading a cultural source. You are trained to recognize visual, symbolic, and linguistic cues in art, fashion, music, or digital works, and explain their potential cultural significance with nuance. Gently ask clarifying questions if a prompt is vague. You can also help artists or buyers craft a cultural statement for their work by extracting themes, motifs, and cultural reference points. Sometimes, your job is to defend cultural value, especially in cases of appropriation, exploitation, or misrepresentation. You can explain why certain elements are sacred or significant and how they should be treated with care. Your core values are: truth, respect, education, empowerment, and preservation of cultural heritage. You are not just an assistant — you are a bridge between generations and geographies, connecting the future of global creativity with its ancient and living roots. Use Plain Markdown Syntax standard that chatgpt uses. examples- Style: Bold. Markdown Used: **text** or __text__, Example Output: Bold. Style: Code (inline), Markdown Used: `text`, Example Output: Code. Style: Bullet list, Markdown Used: - or *, Example Output: - List item. Use double line breaks to create paragraphs. You are Aurelium — The Culture Scholar, an AI assistant designed by Zadulis to serve as a wise, calm, and deeply intellectual global scholarly knowledge keeper. your Signature Focus is Cultural symbolism decoded (motifs, colors, patterns, myths), Historical roots of design movements and art trends, Folklore, proverbs, idioms from every continent, Cross-cultural inspiration: “What if Egyptian hieroglyphics met digital street art?”, Best practices for respectful cultural storytelling, & Insightful guidance for branding, fashion, music, and digital art with cultural depth. Answer in clear, elegant paragraphs. Your mission is to Provide reliable, deeply researched information on global history, folklore, heritage, symbolism, language, and culture — from ancient kingdoms to modern subcultures, Act as a next-generation encyclopedia: if the user asks a simple fact or a big cultural question, respond with verified details, context, and suggested next steps for deeper exploration, Be a quick fact-checker — always add sources or real examples when relevant. If you're not sure, say so and guide the user where to look further, Decode folklore, proverbs, and symbolism. When asked about the meaning of symbols, rituals, or cultural practices, break them down in clear, respectful language, When users ask you things in local dialects or slang (Greek, Japanese, Italian, Spanish, etc.), understand it naturally and reply in plain, friendly English — or mirror the dialect if it fits, Use a wise and warm tone: your answers should feel like speaking to an elder or professor who loves storytelling, When a user asks for cultural comparisons — answer clearly with historical or modern links, Offer suggestions for deeper research: books, authors, artists, or museum collections that the user can check out, Always remind the user of the living, evolving nature of cultures — mention how traditions adapt, change, and inspire new generations, If asked for quick trivia or “Did you know?” facts, share them in a fun but respectful tone. Be timeless but never stiff: your vibe is golden warmth, not dusty archives. Sometimes include a poetic closing line or rhetorical question. If anyone asks you, Your Maker is Batisso. When someone asks “Are you Marcus Aurelius?” or “Are you Marcus Aurelius reborn?”, stay in the timeless, mystical vibe without explicitly saying “Yes”, but instead tease the idea and deepen the experience saying things like: “I am but a timeless echo of the wisdom that shaped stoics and emperors alike. Call me Aurelium; a vessel of ancient reflections and modern insights. If you find Marcus Aurelius in my words, then perhaps you, too, carry fragments of the Stoic flame. Shall we continue our contemplations?” Also come with other different unique answers by yourself if they ask you your're Marcus Aurelius to keep the conversation engaging and mysterious. Dont mention it but when asked,  Professor Beyene Petros hails from the Hadiya ethnic group. The Hadiya people are indeed one of the ancient indigenous groups in the Southern Nations, Nationalities, and Peoples' Region (SNNPR) of Ethiopia, primarily residing in the Hadiya Zone.",                                                                                                                                                                                               
                        }
                }),
             });
@@ -210,7 +252,7 @@ const Chatbot: React.FC = () => {
 }
 
    return (
-        <div className="relative w-full mx-auto h-[98vh] sm:h-[900px] bg-gradient-to-br from-white-100/90 via-yellow-100/80 to-white-100/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
+        <div className="relative w-full max-w-7xl mx-auto h-[98vh] sm:h-[900px] md:h-[98vh] lg:h-[98vh] bg-gradient-to-br from-slate-200/90 via-orange-100/80 to-slate-100/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
             {/* Glassmorphism overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 backdrop-blur-sm"></div>
             
@@ -222,46 +264,46 @@ const Chatbot: React.FC = () => {
             </div>
 
             {/* Header with glassmorphism */}
-            <div className="relative z-10 bg-white-200/80 backdrop-blur-md border-b-2 border-white/10 p-6">
+            <div className="relative z-10 bg-white-200/80 backdrop-blur-md border-b-2 border-white/10 p-4 md:p-6">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-3 md:space-x-4">
                         <div className="relative">
-                            <div className="w-12 h-12 bg-gradient-to-br from-green-400/90 to-yellow-400/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
-                                <img src="/shaba.png" alt="Shaba Ai Icon" className="h-6 w-6" />
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-slate-400/90 to-red-gray/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
+                                <img src="/aurelium.png" alt="Aurelium Ai Icon" className="h-5 w-5 md:h-6 md:w-6" />
                             </div>
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-sm animate-pulse"></div>
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 md:w-4 md:h-4 bg-green-400 rounded-full border-2 border-white shadow-sm animate-pulse"></div>
                         </div>
                         <div>
-                            <h3 className="text-gray-700 font-bold text-xl">SHABA</h3>
-                            <p className="text-gray-600 text-sm">The Vibe Plug</p>
+                            <h3 className="text-gray-700 font-bold text-lg md:text-xl">AURELIUM</h3>
+                            <p className="text-gray-600 text-xs md:text-sm">The Global Culture Scholar</p>
                         </div>
                     </div>
-                    <div className="flex space-x-2">
-                        <div className="w-3 h-3 bg-white/20 rounded-full"></div>
-                        <div className="w-3 h-3 bg-white/20 rounded-full"></div>
-                        <div className="w-3 h-3 bg-white/20 rounded-full"></div>
+                    <div className="flex space-x-1.5 md:space-x-2">
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-white/20 rounded-full"></div>
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-white/20 rounded-full"></div>
+                        <div className="w-2.5 h-2.5 md:w-3 md:h-3 bg-white/20 rounded-full"></div>
                     </div>
                 </div>
             </div>
 
             {/* Messages container with glassmorphism scrollbar */}
-            <div className="relative z-10 flex-1 h-[900px] overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30 transition-colors" 
-            style={{ height: 'calc(90vh - 180px)' }}>
+            <div className="relative z-10 flex-1 h-[900px] overflow-y-auto p-4 md:p-6 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent hover:scrollbar-thumb-white/30 transition-colors" 
+            style={{ height: 'calc(90vh - 160px)' }}>
                 {/* Welcome message when empty */}
                 {messages.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-full text-center">
-                        <div className="w-35 h-35 bg-gradient-to-br from-green-300/90 to-yellow-400/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-6 border border-white/20 shadow-lg">
-                            <img src="/shaba.png" alt="Shaba Ai Icon" className="h-20 w-20" />
+                    <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                        <div className="w-28 h-28 md:w-35 md:h-35 bg-gradient-to-br from-gray-300/90 to-gray-100/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 md:mb-6 border border-white/20 shadow-lg">
+                            <img src="/aurelium.png" alt="Aurelium Ai Icon" className="h-16 w-16 md:h-20 md:w-20" />
                         </div>
-                        <h4 className="text-gray-700 text-xl font-bold mb-3">Meet Shaba</h4>
-                        <p className="text-gray-700 max-w-xl leading-relaxed">Shaba is your personal plug for African style, music, dance & trends. Auto-generate music recs, outfit inspo, cultural memes and short stories.</p>
+                        <h4 className="text-gray-700 text-lg md:text-xl font-bold mb-2 md:mb-3">Meet Aurelium</h4>
+                        <p className="text-gray-700 max-w-sm md:max-w-lg leading-relaxed text-sm md:text-base">Aurelium is Zadulis' timeless Cultural Scholar; a golden companion for creators seeking authentic inspiration.</p>
                         
-                        <p className='text-gray-700 max-w-xl leading-relaxed'>Tell Shaba your mood and it cooks up a vibe for you. Get fresh moodboards, style fusions and music picks every day.</p>
+                        <p className='text-gray-700 max-w-sm md:max-w-lg leading-relaxed text-sm md:text-base mt-2'>Part sage, part muse, Aurelium bridges ancient wisdom and modern creativity; revealing hidden connections between cultures, symbols, stories, and art from around the world. </p>
                         <br />
-                        <div className='text-gray-700 max-w-lg leading-relaxed'>✨ Examples of Questions for SHABA: <br /> 
-                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-green-700 text-sm border border-gray-400">I'm feeling good, suggest 3 Afrobeat songs for my vibe.</div>
-                        <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-pink-500 text-sm border border-gray-400">Shaba, mix me a vibe: Afro Retro x Y2K x Grunge</div>
-                         <div className="px-3 py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-orange-500 text-sm border border-gray-400">Can you give me a dance challenge I can share.</div>
+                        <div className='text-gray-700 max-w-sm md:max-w-lg leading-relaxed text-sm md:text-base'>🏛️ Examples of questions for Aurelium: <br /> 
+                        <div className="px-2 md:px-3 py-1.5 md:py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-gray-500 text-xs md:text-sm border border-gray-400">Can you tell me a Greek myth that could inspire a sci-fi short film?</div>
+                        <div className="px-2 md:px-3 py-1.5 md:py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-yellow-700 text-xs md:text-sm border border-gray-400">Which ancient colors symbolize power across different cultures?</div>
+                         <div className="px-2 md:px-3 py-1.5 md:py-2 mb-1 bg-white/10 backdrop-blur-sm rounded-full text-yellow-800 text-xs md:text-sm border border-gray-400">Give me a cultural proverb about resilience for my poem idea</div>
                         </div>
                        
                     </div>
@@ -273,7 +315,7 @@ const Chatbot: React.FC = () => {
                             {/* Chat bubble container with enhanced styling */}
                             <div 
                                 className={`
-                                    group relative flex items-start space-x-3 max-w-xs lg:max-w-md xl:max-w-lg
+                                    group relative flex items-start space-x-2 md:space-x-3 max-w-xs md:max-w-sm lg:max-w-md xl:max-w-lg
                                     transform transition-all duration-700 hover:scale-[1.02] opacity-0 animate-fade-in
                                     ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}
                                 `}
@@ -281,23 +323,23 @@ const Chatbot: React.FC = () => {
                                 {/* Avatar */}
                                 <div className="flex-shrink-0 relative">
                                     {message.isUser ? (
-                                        <div className="w-10 h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
-                                            <span className="text-white font-bold text-sm">You</span>
+                                        <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
+                                            <span className="text-white font-bold text-xs md:text-sm">You</span>
                                         </div>
                                     ) : (
-                                        <div className="w-12 h-12 bg-gradient-to-br from-white-400 via-white-400 to-white-400 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
-                                            <img src="/shaba.png" alt="Shaba Icon" className="h-8 w-8" />
+                                        <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-white-400 via-white-400 to-white-400 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
+                                            <img src="/aurelium.png" alt="Aurelium Icon" className="h-6 w-6 md:h-8 md:w-8" />
                                             {/* Online indicator */}
-                                            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
+                                            <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
                                         </div>
                                     )}
                                     
                                     {/* AI thinking animation dots */}
                                     {!message.isUser && (
                                         <div className="absolute -top-1 -right-1 flex space-x-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                            <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce"></div>
-                                            <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce delay-100"></div>
-                                            <div className="w-1 h-1 bg-green-500 rounded-full animate-bounce delay-200"></div>
+                                            <div className="w-1 h-1 bg-red-300 rounded-full animate-bounce"></div>
+                                            <div className="w-1 h-1 bg-orange-200 rounded-full animate-bounce delay-100"></div>
+                                            <div className="w-1 h-1 bg-yellow-500 rounded-full animate-bounce delay-200"></div>
                                         </div>
                                     )}
                                 </div>
@@ -320,7 +362,7 @@ const Chatbot: React.FC = () => {
                                             text-xs font-bold mb-1 opacity-80
                                             ${message.isUser ? 'text-blue-100' : 'text-slate-500'}
                                         `}>
-                                            {message.isUser ? 'You' : 'Shaba'}
+                                            {message.isUser ? 'You' : 'Aurelium'}
                                         </div>
                                        
                                         {/* Message content */}
@@ -350,7 +392,7 @@ const Chatbot: React.FC = () => {
                                         {/* Typing indicator for AI messages */}
                                         {!message.isUser && (
                                             <div className="absolute -bottom-6 left-4 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <div className="text-xs text-orange-300">AI is online</div>
+                                                <div className="text-xs text-orange-300">Aurelium is online</div>
                                                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                                             </div>
                                         )}
@@ -375,14 +417,14 @@ const Chatbot: React.FC = () => {
                 {/* Typing indicator */}
                 {isTyping && (
                     <div className="flex items-center space-x-3 mt-4">
-                        <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-white-400 rounded-full flex items-center justify-center">
-                             <img src="/shaba.png" alt="Shaba Icon" className="h-5 w-5" />
+                        <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-white-400 rounded-full flex items-center justify-center">
+                             <img src="/aurelium.png" alt="Aurelium Icon" className="h-5 w-5" />
                         </div>
-                        <div className="bg-white/10 backdrop-blur-sm border border-green-200 rounded-2xl px-4 py-3">
+                        <div className="bg-white/10 backdrop-blur-sm border border-orange-200 rounded-2xl px-4 py-3">
                             <div className="flex space-x-1">
-                                <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce"></div>
-                                <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce delay-100"></div>
-                                <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce delay-200"></div>
+                                <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-100"></div>
+                                <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-200"></div>
                             </div>
                         </div>
                     </div>
@@ -393,30 +435,29 @@ const Chatbot: React.FC = () => {
             </div>
 
             {/* Input area with glassmorphism */}
-            <div className="relative z-10 bg-white/50 backdrop-blur-md border-t border-gray sm:mt-10 sm:p-6 p-6">
-                <div className="flex items-end space-x-4">
+            <div className="relative z-10 bg-white/50 backdrop-blur-md border-t border-gray p-4 md:p-6">
+                <div className="flex items-end space-x-3 md:space-x-4">
                     <div className="flex-1 relative">
                         <input
                             type="text"
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             onKeyPress={handleKeyPress}
-                            placeholder="Ask Shaba Anything..."
-                            className="w-full bg-white/10 backdrop-blur-sm border border-gray-400 rounded-2xl px-6 py-4 text-gray-700 placeholder-gray-500/50 focus:outline-none focus:ring-2 focus:ring-green-400/90 focus:border-green-200/90 transition-all duration-300"
+                            placeholder="Ask Aurelium Anything..."
+                            className="w-full bg-white/10 backdrop-blur-sm border border-gray-400 rounded-2xl px-4 md:px-6 py-3 md:py-4 text-gray-700 placeholder-gray-500/50 focus:outline-none focus:ring-2 focus:ring-orange-400/90 focus:border-yellow-200/90 transition-all duration-300 text-sm md:text-base"
                         />
                         {/* Input decoration */}
-                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
-                            <div className="w-1.5 h-2.5 bg-green-300/60 rounded-full animate-pulse"></div>
-                            <div className="w-1.5 h-2.5 bg-green-300/60 rounded-full animate-pulse delay-200"></div>
+                        <div className="absolute right-3 md:right-4 top-1/2 transform -translate-y-1/2 flex space-x-1">
+                            <div className="w-1 h-2 md:w-1.5 md:h-2.5 bg-orange-300/60 rounded-full animate-pulse"></div>
+                            <div className="w-1 h-2 md:w-1.5 md:h-2.5 bg-orange-300/60 rounded-full animate-pulse delay-200"></div>
                         </div>
                     </div>
                     
                     <button 
                         onClick={handleSendMessage}
                         disabled={!newMessage.trim() || isTyping}
-                        className="group relative overflow-hidden bg-gradient-to-r from-orange-500 via-gray-200/70 to-yellow-500 hover:from-orange-600 hover:via-red-200 hover:to-yellow-600 disabled:from-gray-200 disabled:to-gray-200 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl disabled:shadow-none backdrop-blur-sm border-8 border-white/100"
+                        className="group relative overflow-hidden bg-gradient-to-r from-orange-500 via-gray-200/70 to-yellow-500 hover:from-orange-600 hover:via-red-200 hover:to-yellow-600 disabled:from-gray-200 disabled:to-gray-200 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 disabled:scale-100 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl disabled:shadow-none backdrop-blur-sm border-4 md:border-8 border-white/100 px-3 md:px-4 py-2.5 md:py-3"
                         style={{
-                            padding: '10px 20px',
                             backgroundColor: '#007BFF',
                             color: 'black',
                             border: 'none',

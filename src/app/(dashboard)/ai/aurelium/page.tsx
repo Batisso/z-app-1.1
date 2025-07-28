@@ -1,4 +1,4 @@
-import  NandiView from "@/modules/ai/ui/pages/nandi";
+import  AureliumView from "@/modules/ai/ui/pages/aurelium";
 
 import { getQueryClient, trpc } from "@/trpc/server";
 
@@ -15,7 +15,7 @@ const shopPage = async () => {
   
   <HydrationBoundary state={dehydrate(queryClient)}>
   <Suspense>
-  <NandiView/>
+  <AureliumView/>
   </Suspense>
   </HydrationBoundary>
 

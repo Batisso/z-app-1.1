@@ -181,7 +181,7 @@ export const HomeView = () => {
 
   // Dummy Data
   const featuredCreator = {
-    // name: "Kwame Nkrumah",
+    // name: "Aurelium",
     // category: "Digital Artist",
     // description: "A visionary artist blending traditional African motifs with futuristic digital landscapes.",
     // styleTags: ["Afrofuturist", "NeoHeritage", "Vibrant"],
@@ -596,7 +596,7 @@ export const HomeView = () => {
           {/* New Events / Quick Access to Events Section */}
           <div className="col-span-3 relative z-10 mt-4">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-md font-bold p-2 border-white-200/40" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>HOTTEST EVENTS AROUND AFRICA</h3>
+              <h3 className="text-md font-bold p-2 border-white-200/40" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>HOTTEST EVENTS GLOBALLY</h3>
               <Button variant="link" className="text-[#FF7F00] hover:text-[#E64A19] text-base">
                 <ChevronRight className="ml-1 h-30 w-full sm:h-20 sm:w-20 animate-bounce-horizontal" />
               </Button>
@@ -675,7 +675,7 @@ export const HomeView = () => {
               <div className="relative z-10 flex flex-col items-center justify-center text-center ">
                 <h3 className="text-lg font-extrabold mb-2 bg-white/70 border-2 p-3 rounded-4xl border-gray-200" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>ZADULIS CIRCLES</h3>
                 <p className="text-sm text-black mb-4 max-w-xs bg-white/70 border-2 p-3 rounded-4xl border-gray-200" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>
-                  Connect with like-minded creators and build your community.
+                  Connect with like-minded creators and build your circle.
                 </p>
                 <Button variant="outline" className="rounded-lg border-[#FF7F00] hover:bg-orange-50">
                   Open
@@ -696,7 +696,7 @@ export const HomeView = () => {
               <div className="relative z-10 flex flex-col items-center justify-center text-center">
                 <h3 className="text-lg font-extrabold mb-2 bg-white/70 border-2 p-3 rounded-4xl border-gray-200" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>ZADULIS AI</h3>
                 <p className="text-sm text-black mb-4 max-w-xs bg-white/70 border-2 p-3 rounded-4xl border-gray-200" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>
-                  Explore our intelligent trained and crafted African AI companions
+                  Explore our intelligent and crafted AI companions for authentic creatives
                 </p>
                 <Button variant="outline" className="rounded-lg border-[#FF7F00] hover:bg-orange-50">
                   Open
@@ -717,7 +717,7 @@ export const HomeView = () => {
               <div className="relative z-10 flex flex-col items-center justify-center text-center ">
                  <h3 className="text-lg font-extrabold mb-2 bg-white/70 border-2 p-3 rounded-4xl border-gray-200" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>ZADULIS SHOP</h3>
                 <p className="text-sm text-black mb-4 max-w-xs bg-white/70 border-2 p-3 rounded-4xl border-gray-200" style={{ textShadow: '0 0 8px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.6)' }}>
-                  Soon, you'll be able to buy and sell any Original African Art, Fashion, and Products
+                  Soon, you'll be able to buy and sell any global original & authentic art, fashion, and products 
                 </p>
                 <Button variant="outline" className="rounded-lg border-2 border-[#FF7F00] hover:bg-orange-50">
                   Open

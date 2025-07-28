@@ -13,6 +13,7 @@
   "dependencies": {
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
+    "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@google/generative-ai": "^0.24.1",
@@ -52,6 +53,7 @@
     "@trpc/react-query": "^11.4.3",
     "@trpc/server": "^11.1.2",
     "@trpc/tanstack-react-query": "^11.1.2",
+    "airtable": "^0.12.2",
     "better-auth": "^1.2.8",
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",

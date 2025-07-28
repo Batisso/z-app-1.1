@@ -1635,8 +1635,8 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-orange-900/70 to-orange-900/60 flex items-center justify-center">
             <div className="text-center text-white">
-              <h1 className="text-2xl sm:text-2xl md:text-2xl lg:text-4xl font-bold mb-2">DISCOVER THE WORLDS BOLDEST CREATORS</h1>
-              <p className="text-sm sm:text-lg mb-4">Browse and connect with a new generation of global artists, designers, and culture-makers.</p>
+              <h1 className="text-2xl sm:text-2xl md:text-2xl lg:text-4xl font-bold mb-2">DISCOVER GLOBAL CULTURAL & AUTHENTIC CREATIVITY</h1>
+              <p className="text-sm sm:text-lg mb-4">Browse and connect with the artists, designers, and culture-makers impacting creativity worldwide.</p>
               <div className="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4">
                 <button 
                   onClick={scrollToFilters}
@@ -1708,7 +1708,7 @@ function Filters({ filters, isLoading = false, error = null }: FiltersProps) {
                   placeholder={`Search ${activeView.toLowerCase()}...`}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="text-gray-600 w-full pl-9 pr-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:shadow-lg hover:shadow-red-500/50 transition-shadow duration-300 dark:bg-gray-700 dark:text-white"
+                  className="text-gray-600 w-full pl-9 pr-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:shadow-lg hover:shadow-orange-500/50 transition-shadow duration-300 dark:bg-gray-700 dark:text-white"
                 />
               </div>
 

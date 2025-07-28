@@ -227,13 +227,13 @@ const Chatbot: React.FC = () => {
                     <div className="flex items-center space-x-4">
                         <div className="relative">
                             <div className="w-12 h-12 bg-gradient-to-br from-slate-400/90 to-red-gray/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-white/20">
-                                <img src="/kwame.png" alt="Kwame Ai Icon" className="h-6 w-6" />
+                                <img src="/aurelium.png" alt="Kwame Ai Icon" className="h-6 w-6" />
                             </div>
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-sm animate-pulse"></div>
                         </div>
                         <div>
-                            <h3 className="text-gray-700 font-bold text-xl">KWAME</h3>
-                            <p className="text-gray-600 text-sm">The African Culture Scholar</p>
+                            <h3 className="text-gray-700 font-bold text-xl">Aurelium</h3>
+                            <p className="text-gray-600 text-sm">The Global Culture Scholar</p>
                         </div>
                     </div>
                     <div className="flex space-x-2">
@@ -251,7 +251,7 @@ const Chatbot: React.FC = () => {
                 {messages.length === 0 && (
                     <div className="flex flex-col items-center justify-center h-full text-center">
                         <div className="w-35 h-35 bg-gradient-to-br from-gray-300/90 to-gray-100/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-6 border border-white/20 shadow-lg">
-                            <img src="/kwame.png" alt="Kwame Ai Icon" className="h-20 w-20" />
+                            <img src="/aurelium.png" alt="Kwame Ai Icon" className="h-20 w-20" />
                         </div>
                         <h4 className="text-gray-700 text-xl font-bold mb-3">Meet Kwame</h4>
                         <p className="text-gray-700 max-w-lg leading-relaxed">The African Culture Scholar of Zadulis; your AI-powered gateway into the heartbeat of African creativity, heritage, and future-forward expression.</p>
@@ -286,7 +286,7 @@ const Chatbot: React.FC = () => {
                                         </div>
                                     ) : (
                                         <div className="w-12 h-12 bg-gradient-to-br from-white-400 via-white-400 to-white-400 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white/20 group-hover:ring-white/40 transition-all duration-300">
-                                            <img src="/kwame.png" alt="Kwame Icon" className="h-8 w-8" />
+                                            <img src="/aurelium.png" alt="Kwame Icon" className="h-8 w-8" />
                                             {/* Online indicator */}
                                             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
                                         </div>
@@ -376,7 +376,7 @@ const Chatbot: React.FC = () => {
                 {isTyping && (
                     <div className="flex items-center space-x-3 mt-4">
                         <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-white-400 rounded-full flex items-center justify-center">
-                             <img src="/kwame.png" alt="Kwame Icon" className="h-5 w-5" />
+                             <img src="/aurelium.png" alt="Kwame Icon" className="h-5 w-5" />
                         </div>
                         <div className="bg-white/10 backdrop-blur-sm border border-orange-200 rounded-2xl px-4 py-3">
                             <div className="flex space-x-1">
